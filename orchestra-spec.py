@@ -27,6 +27,8 @@ from orchestra import (
     DerivedFeature,
     Key,
     DataSink,
+    RawLabel,
+    DerivedLabel,
 )
 
 from orchestra.DataTypes import (
@@ -203,9 +205,17 @@ prediction = Prediction(
     business_logic="",
 )
 
-label = Label(
+derived_label = DerivedLabel(
     #####
-    # Same as in Feature
+    # Same as in DerivedFeature
+    # A label that needs business logic applied to get the value
+    #####
+)
+
+raw_label = RawLabel(
+    #####
+    # Same as in RawFeature
+    # A label that is useful in its existing form
     #####
 )
 
