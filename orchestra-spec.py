@@ -346,3 +346,61 @@ def sql_data_code():
 # [2] PySpark and SparkSQL
 # [3] others?
 
+#####################
+# Model
+#####################
+
+ml_model = Model(
+    # machine-readable but human-understandable common name
+    name="model-name",
+    # human-readable notes
+    description="this model predicts something awesome business thing",
+    # output only. what data keys describe the entity upon which the prediction is made?
+    # these are autmatically set during model training process by Orchestra
+    keys=[Key(), Key()],
+    # output only. what input features are required?
+    # these are autmatically set during model training process by Orchestra
+    input_features=[Feature(), DerivedFeature()],
+    # optionally, code that processes the direct output of .predict() to the `output_features`
+    output_datacode=DataCode(),
+    # output Features delivered by the model
+    output_features=[
+        Prediction(name="prediction-name", type=Float),
+        Feature(name="prediction-probability", type=Float),
+    ],
+    # output only. training code used.
+    training_code=ModelTrainingCode(),
+    # output only. training data used.
+    training_data=TrainingData(),
+    # output only. Model Registry link. set autmatically during model training process by Orchestra.
+    model_registry=ModelRegistry(),
+)
+
+
+# TODO: Define the model training code interface
+
+# TODO: Define TrainingData interface
+
+# TODO: Define ModelRegistry interface
+
+# TODO: Think about how we version models.  Right now, the design is silent - I think that something like MLFlow's version numbers might be what we need...
+
+# TODO: Thinking through how the raw output of a model gets translated back to Feature() abstractions.  I think this may need to look like some output_datacode, but am not sure.
+
+# TODO: Think about the situation in which the artifact stored in the Model Registry might not be sufficient for serving.  For example, MLFlow = MR, but the user wants to use BentoML (which :head-slam: asks you to save the model in their native format even if you use their 'perfect' MLflow integration -- or you miss out on their serving optimizations.  FML.).
+
+# Work in progress
+model_endpoint = ModelEndpoint(
+    # machine-readable but human-understandable common name
+    name="model-name",
+    # human-readable notes
+    description="this model predicts something awesome business thing",
+    # what models does this endpoint serve?
+    # including multiple models here enables A/B testing or other patterns like Bandits.
+    models=[Model()],
+    # expirements
+    # TBD - how do we define this?
+    # what inputs does the API accept?
+    # this has to be a subset of the union(input_features, keys) of the model(s)
+    api_features=[Key(), Feature()],
+)
