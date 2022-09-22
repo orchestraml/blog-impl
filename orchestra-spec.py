@@ -294,14 +294,6 @@ data_sink = DataSink()
 # Data Code
 #####################
 
-# python code as dict
-# python code as DF
-
-
-# data provider specific code
-# sql example
-# pyspark example
-
 
 @DataCode(
     # machine-readable but human-understandable common name
@@ -348,3 +340,9 @@ def sql_data_code():
 # TODO: How do we run data code that does NOT run within the data infra?  e.g., SQL is easy to push to the database, but how do we run the Python code?  Probably looks something like a Docker image + push it to K8s within our controlled customer project?  Or maybe within an Airflow job in the customer's project (but we may run into scaling issues)
 
 # TODO: Flesh out how you can define different data code for different environments e.g., production is in Java and development is in Python.  FWIW, I do not like this design pattern, but I think there will probably be some edge cases where it needs to happen.  Think more about this...
+
+# TODO: Add more examples for add't data types
+# [1] python code that takes dataframes as inputs
+# [2] PySpark and SparkSQL
+# [3] others?
+
