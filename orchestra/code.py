@@ -13,6 +13,15 @@ class Code:
     name, description, key:value tags
     """
 
+    location: str
+    """
+    TODO placeholder to link to Git"""
+
+
+class ModelTrainingCode(Code):
+    """
+    placeholder"""
+
 
 class DataCode(Code):
     """
