@@ -1,9 +1,9 @@
-from typing import List, Set, Optional
+from typing import List, Set
 
 from feature import Key, Timestamp, Feature
 from datacheck import DataCheck
 from environment import EnvironmentType
-from common import Tag, Metadata
+from common import Metadata
 
 
 class DataProviderType:

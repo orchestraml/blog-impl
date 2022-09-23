@@ -29,15 +29,13 @@
 <pre><code class="python">from __future__ import annotations
 from dataclasses import dataclass
 
-from typing import Iterable
-from pydantic import BaseModel
-from typing import List, Optional, Literal, Tuple, Set
+from typing import List, Optional, Literal
 
 
 from datatype import DataType
 from datetime import timedelta
 from model import Model
-from common import Tag, Metadata
+from common import Metadata
 from datacode import DataCode
 from datacheck import DataChecksForFeature
 
@@ -492,6 +490,7 @@ Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
 <li><code><b><a title="datacode.DataCode" href="datacode.html#datacode.DataCode">DataCode</a></b></code>:
 <ul class="hlist">
 <li><code><a title="datacode.DataCode.input_records_needed" href="datacode.html#datacode.DataCode.input_records_needed">input_records_needed</a></code></li>
+<li><code><a title="datacode.DataCode.type" href="datacode.html#datacode.DataCode.type">type</a></code></li>
 </ul>
 </li>
 <li><code><b><a title="datacode.Code" href="datacode.html#datacode.Code">Code</a></b></code>:

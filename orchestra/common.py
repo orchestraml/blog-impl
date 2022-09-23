@@ -1,13 +1,4 @@
-from typing import Tuple, Optional, Set
-
-
-class Tag(Tuple):
-    """key: value pair that is user definable.
-    Used to store information on any top-level object.
-    """
-
-    key: str
-    value: str
+from typing import Tuple, Optional
 
 
 class Metadata(Tuple):
@@ -25,7 +16,7 @@ class Metadata(Tuple):
     Human-readable notes
     """
 
-    tags: Set[Tag]
+    tags: dict
     """
     Human or machine defined tags for easy indexing and reference
     """

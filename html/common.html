@@ -26,16 +26,7 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from typing import Tuple, Optional, Set
-
-
-class Tag(Tuple):
-    &#34;&#34;&#34;key: value pair that is user definable.
-    Used to store information on any top-level object.
-    &#34;&#34;&#34;
-
-    key: str
-    value: str
+<pre><code class="python">from typing import Tuple, Optional
 
 
 class Metadata(Tuple):
@@ -53,7 +44,7 @@ class Metadata(Tuple):
     Human-readable notes
     &#34;&#34;&#34;
 
-    tags: Set[Tag]
+    tags: dict
     &#34;&#34;&#34;
     Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;</code></pre>
@@ -93,7 +84,7 @@ class Metadata(Tuple):
     Human-readable notes
     &#34;&#34;&#34;
 
-    tags: Set[Tag]
+    tags: dict
     &#34;&#34;&#34;
     Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;</code></pre>
@@ -113,45 +104,9 @@ class Metadata(Tuple):
 <dd>
 <div class="desc"><p>Machine-readable but human-understandable name</p></div>
 </dd>
-<dt id="common.Metadata.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="#common.Tag">Tag</a>]</code></dt>
+<dt id="common.Metadata.tags"><code class="name">var <span class="ident">tags</span> : dict</code></dt>
 <dd>
 <div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
-</dd>
-</dl>
-</dd>
-<dt id="common.Tag"><code class="flex name class">
-<span>class <span class="ident">Tag</span></span>
-<span>(</span><span>iterable=(), /)</span>
-</code></dt>
-<dd>
-<div class="desc"><p>key: value pair that is user definable.
-Used to store information on any top-level object.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Tag(Tuple):
-    &#34;&#34;&#34;key: value pair that is user definable.
-    Used to store information on any top-level object.
-    &#34;&#34;&#34;
-
-    key: str
-    value: str</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li>builtins.tuple</li>
-<li>typing.Generic</li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="common.Tag.key"><code class="name">var <span class="ident">key</span> : str</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="common.Tag.value"><code class="name">var <span class="ident">value</span> : str</code></dt>
-<dd>
-<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -172,13 +127,6 @@ Used to store information on any top-level object.</p></div>
 <li><code><a title="common.Metadata.description" href="#common.Metadata.description">description</a></code></li>
 <li><code><a title="common.Metadata.name" href="#common.Metadata.name">name</a></code></li>
 <li><code><a title="common.Metadata.tags" href="#common.Metadata.tags">tags</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="common.Tag" href="#common.Tag">Tag</a></code></h4>
-<ul class="">
-<li><code><a title="common.Tag.key" href="#common.Tag.key">key</a></code></li>
-<li><code><a title="common.Tag.value" href="#common.Tag.value">value</a></code></li>
 </ul>
 </li>
 </ul>

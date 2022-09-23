@@ -1,15 +1,13 @@
 from __future__ import annotations
 from dataclasses import dataclass
 
-from typing import Iterable
-from pydantic import BaseModel
-from typing import List, Optional, Literal, Tuple, Set
+from typing import List, Optional, Literal
 
 
 from datatype import DataType
 from datetime import timedelta
 from model import Model
-from common import Tag, Metadata
+from common import Metadata
 from datacode import DataCode
 from datacheck import DataChecksForFeature
 

@@ -26,8 +26,8 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from typing import Literal, Set, Optional
-from common import Tag, Metadata
+<pre><code class="python">from typing import Literal
+from common import Metadata
 
 
 class Code:
@@ -46,6 +46,8 @@ class DataCode(Code):
     &#34;&#34;&#34;
     Code that takes 1+ Features and returns 1+ Features
 
+    Python:
+
     &#34;&#34;&#34;
 
     input_records_needed = Literal[&#34;SingleRecord&#34;, &#34;Aggregation&#34;, &#34;AllRecords&#34;, &#34;Join&#34;]
@@ -58,7 +60,29 @@ class DataCode(Code):
 
     AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
 
-    &#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;
+
+    type = Literal[&#34;SQL&#34;, &#34;SparkSQL&#34;, &#34;pySpark&#34;, &#34;Python&#34;]
+    &#34;&#34;&#34;
+    What type of code does this block contain?&#34;&#34;&#34;
+
+
+# TODO: Where do custom aggregation functions fit in?  I think they should be part of the Aggregations framework, but they will require DataCode...think this through.
+
+# TODO: Define a multiple-feature abstraction e.g., let the data scientist deliver multiple features within one code block.
+
+# TODO: Can we enable Connor&#39;s preferred journey (that I think is common) - the DS just wants to write some quick SQL and get some features to test.  How can we bring that into this framework with minimal overhead.  Loose thinking - [1] provide a translator from SQL to Orchestra object [2] use a multiple-feature object and use {{}} vars inside the sql code so we can have some level of understanding of what happens [3] ...
+
+# TODO: Flesh out the table of languages we support.  What are the limtiations of each?  How can we design this to easily allow any data code for any data infra to work without us needing knowledge of that tool&#39;s language (e.g., we enable [insert new data tool] very easily)
+
+# TODO: How do we run data code that does NOT run within the data infra?  e.g., SQL is easy to push to the database, but how do we run the Python code?  Probably looks something like a Docker image + push it to K8s within our controlled customer project?  Or maybe within an Airflow job in the customer&#39;s project (but we may run into scaling issues)
+
+# TODO: Flesh out how you can define different data code for different environments e.g., production is in Java and development is in Python.  FWIW, I do not like this design pattern, but I think there will probably be some edge cases where it needs to happen.  Think more about this...
+
+# TODO: Add more examples for add&#39;t data types
+# [1] python code that takes dataframes as inputs
+# [2] PySpark and SparkSQL
+# [3] others?</code></pre>
 </details>
 </section>
 <section>
@@ -107,7 +131,8 @@ Throws an error if used directly.</p></div>
 <span>class <span class="ident">DataCode</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>Code that takes 1+ Features and returns 1+ Features</p></div>
+<div class="desc"><p>Code that takes 1+ Features and returns 1+ Features</p>
+<p>Python:</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
@@ -115,6 +140,8 @@ Throws an error if used directly.</p></div>
 <pre><code class="python">class DataCode(Code):
     &#34;&#34;&#34;
     Code that takes 1+ Features and returns 1+ Features
+
+    Python:
 
     &#34;&#34;&#34;
 
@@ -128,7 +155,11 @@ Throws an error if used directly.</p></div>
 
     AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
 
-    &#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;
+
+    type = Literal[&#34;SQL&#34;, &#34;SparkSQL&#34;, &#34;pySpark&#34;, &#34;Python&#34;]
+    &#34;&#34;&#34;
+    What type of code does this block contain?&#34;&#34;&#34;</code></pre>
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
@@ -146,6 +177,10 @@ Throws an error if used directly.</p></div>
 <p>Aggregation: Requires multiple records of data from the same GROUP BY features.</p>
 <p>Join: Requires records obtained by joining to a Dataset with differnet Key(s)</p>
 <p>AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)</p></div>
+</dd>
+<dt id="datacode.DataCode.type"><code class="name">var <span class="ident">type</span></code></dt>
+<dd>
+<div class="desc"><p>What type of code does this block contain?</p></div>
 </dd>
 </dl>
 <h3>Inherited members</h3>
@@ -178,6 +213,7 @@ Throws an error if used directly.</p></div>
 <h4><code><a title="datacode.DataCode" href="#datacode.DataCode">DataCode</a></code></h4>
 <ul class="">
 <li><code><a title="datacode.DataCode.input_records_needed" href="#datacode.DataCode.input_records_needed">input_records_needed</a></code></li>
+<li><code><a title="datacode.DataCode.type" href="#datacode.DataCode.type">type</a></code></li>
 </ul>
 </li>
 </ul>

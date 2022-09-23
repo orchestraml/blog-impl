@@ -1,5 +1,5 @@
-from typing import Optional, Set
-from common import Tag, Metadata
+from typing import Optional
+from common import Metadata
 
 
 class DataCheck:

@@ -1,4 +1,4 @@
-from common import Tag, Metadata
+from common import Metadata
 from typing import Set, Optional
 
 
