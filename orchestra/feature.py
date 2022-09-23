@@ -6,8 +6,8 @@ from pydantic import BaseModel
 from typing import List, Optional, Literal, Tuple, Set
 
 
-from datatypes import DataType
-from environments import EnvironmentType
+from datatype import DataType
+from environment import EnvironmentType
 from datetime import timedelta
 from model import Model
 from common import Tag
