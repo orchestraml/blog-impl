@@ -29,7 +29,7 @@
 <pre><code class="python">from typing import List, Set, Optional
 
 from feature import Key, Timestamp, Feature
-from datachecks import DataCheck
+from datacheck import DataCheck
 from environment import EnvironmentType
 from common import Tag, Metadata
 
@@ -283,7 +283,7 @@ BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="dataprovider.InputDataSchema.data_checks"><code class="name">var <span class="ident">data_checks</span> : List[<a title="datachecks.DataCheck" href="datachecks.html#datachecks.DataCheck">DataCheck</a>]</code></dt>
+<dt id="dataprovider.InputDataSchema.data_checks"><code class="name">var <span class="ident">data_checks</span> : List[<a title="datacheck.DataCheck" href="datacheck.html#datacheck.DataCheck">DataCheck</a>]</code></dt>
 <dd>
 <div class="desc"><p>Any data quality or data distribution checks that should be performed on the incoming data.
 Executed by Orchesrta using the user's supplied checking framwork.</p></div>

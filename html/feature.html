@@ -39,7 +39,7 @@ from datetime import timedelta
 from model import Model
 from common import Tag, Metadata
 from datacode import DataCode
-from datachecks import DataChecksForFeature
+from datacheck import DataChecksForFeature
 
 
 class MLTransformation:
@@ -782,7 +782,7 @@ Some say “feature engineering”, some say “pre-processing”, some use a co
 Potato-patato.
 Irregardless of what you call it, folks apply business logic, then transform everything to numbers.</p></div>
 </dd>
-<dt id="feature.Feature.data_checks"><code class="name">var <span class="ident">data_checks</span> : Optional[<a title="datachecks.DataChecksForFeature" href="datachecks.html#datachecks.DataChecksForFeature">DataChecksForFeature</a>]</code></dt>
+<dt id="feature.Feature.data_checks"><code class="name">var <span class="ident">data_checks</span> : Optional[<a title="datacheck.DataChecksForFeature" href="datacheck.html#datacheck.DataChecksForFeature">DataChecksForFeature</a>]</code></dt>
 <dd>
 <div class="desc"><p>Any data quality or data distribution checks that should be performed.
 Executed by Orchesrta using the user's supplied checking framwork.</p></div>

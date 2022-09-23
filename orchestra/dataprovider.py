@@ -1,7 +1,7 @@
 from typing import List, Set, Optional
 
 from feature import Key, Timestamp, Feature
-from datachecks import DataCheck
+from datacheck import DataCheck
 from environment import EnvironmentType
 from common import Tag, Metadata
 

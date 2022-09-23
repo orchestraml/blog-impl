@@ -11,7 +11,7 @@ from datetime import timedelta
 from model import Model
 from common import Tag, Metadata
 from datacode import DataCode
-from datachecks import DataChecksForFeature
+from datacheck import DataChecksForFeature
 
 
 class MLTransformation:
