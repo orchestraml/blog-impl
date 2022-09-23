@@ -31,18 +31,35 @@ from dataclasses import dataclass
 
 from typing import Iterable
 from pydantic import BaseModel
-from typing import List, Optional, Literal
+from typing import List, Optional, Literal, Tuple, Set
 
 
+# from types import DataType, EnvironmentType, DataProviderType
 from datatypes import DataType
+from environments import EnvironmentType
+from dataproviders import DataProviderType
 from datetime import timedelta
 from model import Model
+
+
+class Tag(Tuple):
+    &#34;&#34;&#34;key: value pair that is user definable.
+    Used to store information on any top-level object.
+    &#34;&#34;&#34;
+
+    key: str
+    value: str
 
 
 class DataCheck:
     &#34;&#34;&#34;
 
     Placeholder for Deequ, PyTest, great_expectation based checks
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;
 
     # TODO: Flesh out data checks.
@@ -62,6 +79,11 @@ class Code:
     &#34;&#34;&#34;
     Parent class of all code types.
     Throws an error if used directly.
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;
 
 
@@ -87,6 +109,11 @@ class DataCode(Code):
 class MLTransformation:
     &#34;&#34;&#34;
     Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;
 
     input_datatype: List[DataType]
@@ -184,6 +211,11 @@ class Feature:
     description: str
     &#34;&#34;&#34;
     Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;
 
     input_features: List[Feature]
@@ -403,8 +435,22 @@ class Aggregation(DataCode):
     &#34;&#34;&#34;
 
 
-class InputDataView:
-    &#34;&#34;&#34; &#34;&#34;&#34;
+class InputDataSchema:
+    &#34;&#34;&#34;
+    `InputDataSchema` defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.
+
+    `InputDataProviders` defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by `InputDataSchema`.
+
+    Together, `InputDataSchema` and `InputDataProviders` are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).
+
+    Why separate `InputDataSchema` from the `InputDataProviders`?
+
+    Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).
+
+    Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.
+
+    The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
+    &#34;&#34;&#34;
 
     name: str
     &#34;&#34;&#34;
@@ -416,25 +462,110 @@ class InputDataView:
     Human-readable notes
     &#34;&#34;&#34;
 
-    # # machine-readable but human-understandable common name
-    # name = (&#34;data_source_name&#34;,)
-    # # human-readable notes
-    # description = (&#34;this source describes X business thing&#34;,)
-    # # the unique keys that describe the entity contained within this table
-    # keys = ([Key(), Key()],)
-    # timestamp = (
-    #     Timestamp(name=&#34;last_updated&#34;, human_datatype=String, format=&#34;yyyyMMdd|hh:ss&#34;),
-    # )
-    # # the features provided; in database terms, the schema
-    # # `keys` and `timestamp` can be treated by the user as if they were defined as output_features, but the user does not need to include them here
-    # output_features = (
-    #     [
-    #         Feature(),
-    #         Feature(),
-    #     ],
-    # )
-    # # Any data quality or data distribution checks that should be performed before passing this data downstream
-    # data_checks = (&#34;&#34;,)</code></pre>
+    keys: List[Key]
+    &#34;&#34;&#34;
+    The unique keys that describe the entity contained within this table.  For example, [user_id, transaction_id}.
+    Often referred to as:
+    * Primary key
+    * Data grain
+    * Entity
+    * ... others ...
+    &#34;&#34;&#34;
+
+    # TODO: Other feature stores split out entity to a top level object.  Why is this?  I keep thinking it feels redundant but maybe there is an advantage to having shared entities when it comes to collaboration particularly when teams are sharing features about many common entities such as users?
+
+    timestamp: Timestamp
+    &#34;&#34;&#34;
+    Which column of data has the timestamp of the record?
+    Used to support time-travel-aware joins.
+    &#34;&#34;&#34;
+
+    output_features: List[Feature]
+    &#34;&#34;&#34;
+    The `Features` delivered by a InputDataProvider confirming to this `InputDataSchema`.
+    
+    In database terms, the schema.
+
+    `keys` and `timestamp` can be treated by the user as if they were defined as output_features.  Orchestra automatically appends these Features to the list.
+    &#34;&#34;&#34;
+
+    data_checks: List[DataCheck]
+    &#34;&#34;&#34;
+    Any data quality or data distribution checks that should be performed on the incoming data.  Executed by Orchesrta using the user&#39;s supplied checking framwork.
+    &#34;&#34;&#34;
+
+
+class DataProviderConfig:
+    &#34;&#34;&#34;
+    Configuration settings for a specific provider
+    For example
+    # [1] S3 path + credentials
+    # [2] BigQuery database URI + credentials
+    # [3] DBT model directory + run command
+    &#34;&#34;&#34;
+
+    # TODO: implement this to be key:value pairs
+
+
+class InputDataSource:
+    &#34;&#34;&#34;
+    `InputDataSchema` defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.
+
+    `InputDataProviders` defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by `InputDataSchema`.
+
+    Together, `InputDataSchema` and `InputDataProviders` are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).
+
+    Why separate `InputDataSchema` from the `InputDataProviders`?
+
+    Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).
+
+    Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.
+
+    The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
+    &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    provider: DataProviderType
+    &#34;&#34;&#34;
+    What is the actual infra?  BigQuery, Snowflake, S3, Google Sheests, Kafka, etc
+    &#34;&#34;&#34;
+
+    provider_config: DataProviderConfig
+    &#34;&#34;&#34;
+    Configuration settings for a specific provider
+    For example:
+    [1] S3 path + credentials
+    [2] BigQuery database URI + credentials
+    [3] DBT model directory + run command&#34;&#34;&#34;
+
+    environment: Set[EnvironmentType]
+    &#34;&#34;&#34;
+    In which environments is this data available for use?  Use cases:
+    [1] Have seperate DatasetProviders in development vs. production (e.g,. use a local CSV export of sensitive data that&#39;s only available with machine-level credentials, etc)
+    [2] Have multiple production DatasetProviders e.g., Kafka + Snowflake where one provider is used for second- latency features and the other used for week+ latency features.
+    &#34;&#34;&#34;
+
+    # TODO: Do we need a way to run DataCode() on a InputDataProvider?  or, should this be handled by each provider&#39;s config?  An example use case might be changing column names, dropping rows that are &gt;x% null, filtering out known bad rows, etc.  I lean to yes...
+
+
+class OutputDataSink:
+    &#34;&#34;&#34; &#34;&#34;&#34;
+
+    # TODO: Add in the concept of a data sink.  How will we save things like prediction logs, cached training data, etc.</code></pre>
 </details>
 </section>
 <section>
@@ -566,6 +697,11 @@ Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
 <li><code><a title="data.DataCode.records_needed" href="#data.DataCode.records_needed">records_needed</a></code></li>
 </ul>
 </li>
+<li><code><b><a title="data.Code" href="#data.Code">Code</a></b></code>:
+<ul class="hlist">
+<li><code><a title="data.Code.tags" href="#data.Code.tags">tags</a></code></li>
+</ul>
+</li>
 </ul>
 </dd>
 <dt id="data.AutomaticTransformation"><code class="flex name class">
@@ -598,6 +734,7 @@ Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
 <li><code><a title="data.MLTransformation.input_datatype" href="#data.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.output_datatype" href="#data.MLTransformation.output_datatype">output_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.records_needed" href="#data.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="data.MLTransformation.tags" href="#data.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -616,12 +753,24 @@ Throws an error if used directly.</p></div>
     &#34;&#34;&#34;
     Parent class of all code types.
     Throws an error if used directly.
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;</code></pre>
 </details>
 <h3>Subclasses</h3>
 <ul class="hlist">
 <li><a title="data.DataCode" href="#data.DataCode">DataCode</a></li>
 </ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="data.Code.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="data.Tag" href="#data.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
+</dl>
 </dd>
 <dt id="data.CustomTransformation"><code class="flex name class">
 <span>class <span class="ident">CustomTransformation</span></span>
@@ -662,6 +811,7 @@ Throws an error if used directly.</p></div>
 <li><code><a title="data.MLTransformation.input_datatype" href="#data.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.output_datatype" href="#data.MLTransformation.output_datatype">output_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.records_needed" href="#data.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="data.MLTransformation.tags" href="#data.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -681,11 +831,23 @@ Throws an error if used directly.</p></div>
     Placeholder for Deequ, PyTest, great_expectation based checks
     &#34;&#34;&#34;
 
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
     # TODO: Flesh out data checks.
     # [1] Do we actually need these on ml_transformations?  If so, how do we provide checks for each individual ml_transformation since they are discrete?
     # [2] What libraries do we support and in what order?  deequ, great_expectaions, pytest
     # [3] Where do these get run?  How can we push this to the customer&#39;s data infra?</code></pre>
 </details>
+<h3>Class variables</h3>
+<dl>
+<dt id="data.DataCheck.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="data.Tag" href="#data.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
+</dl>
 </dd>
 <dt id="data.DataChecksForFeature"><code class="flex name class">
 <span>class <span class="ident">DataChecksForFeature</span></span>
@@ -767,6 +929,39 @@ Throws an error if used directly.</p></div>
 <p>AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)</p></div>
 </dd>
 </dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="data.Code" href="#data.Code">Code</a></b></code>:
+<ul class="hlist">
+<li><code><a title="data.Code.tags" href="#data.Code.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="data.DataProviderConfig"><code class="flex name class">
+<span>class <span class="ident">DataProviderConfig</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Configuration settings for a specific provider
+For example</p>
+<h1 id="1-s3-path-credentials">[1] S3 path + credentials</h1>
+<h1 id="2-bigquery-database-uri-credentials">[2] BigQuery database URI + credentials</h1>
+<h1 id="3-dbt-model-directory-run-command">[3] DBT model directory + run command</h1></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataProviderConfig:
+    &#34;&#34;&#34;
+    Configuration settings for a specific provider
+    For example
+    # [1] S3 path + credentials
+    # [2] BigQuery database URI + credentials
+    # [3] DBT model directory + run command
+    &#34;&#34;&#34;
+
+    # TODO: implement this to be key:value pairs</code></pre>
+</details>
 </dd>
 <dt id="data.DerivedFeature"><code class="flex name class">
 <span>class <span class="ident">DerivedFeature</span></span>
@@ -801,6 +996,7 @@ This is the most commonly used class within Orchestra.</p></div>
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -839,6 +1035,7 @@ For example, removing known bad labels, etc.</p></div>
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -885,6 +1082,11 @@ class Feature:
     description: str
     &#34;&#34;&#34;
     Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;
 
     input_features: List[Feature]
@@ -1025,19 +1227,43 @@ Set automatically based on the <code>ml_transformations.output_datatype</code>'s
 <dd>
 <div class="desc"><p>Machine-readable but human-understandable name</p></div>
 </dd>
+<dt id="data.Feature.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="data.Tag" href="#data.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
 </dl>
 </dd>
-<dt id="data.InputDataView"><code class="flex name class">
-<span>class <span class="ident">InputDataView</span></span>
+<dt id="data.InputDataSchema"><code class="flex name class">
+<span>class <span class="ident">InputDataSchema</span></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p><code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code> defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.</p>
+<p><code>InputDataProviders</code> defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code>.</p>
+<p>Together, <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code> and <code>InputDataProviders</code> are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).</p>
+<p>Why separate <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code> from the <code>InputDataProviders</code>?</p>
+<p>Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).</p>
+<p>Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.</p>
+<p>The <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code> abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class InputDataView:
-    &#34;&#34;&#34; &#34;&#34;&#34;
+<pre><code class="python">class InputDataSchema:
+    &#34;&#34;&#34;
+    `InputDataSchema` defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.
+
+    `InputDataProviders` defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by `InputDataSchema`.
+
+    Together, `InputDataSchema` and `InputDataProviders` are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).
+
+    Why separate `InputDataSchema` from the `InputDataProviders`?
+
+    Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).
+
+    Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.
+
+    The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
+    &#34;&#34;&#34;
 
     name: str
     &#34;&#34;&#34;
@@ -1049,35 +1275,179 @@ Set automatically based on the <code>ml_transformations.output_datatype</code>'s
     Human-readable notes
     &#34;&#34;&#34;
 
-    # # machine-readable but human-understandable common name
-    # name = (&#34;data_source_name&#34;,)
-    # # human-readable notes
-    # description = (&#34;this source describes X business thing&#34;,)
-    # # the unique keys that describe the entity contained within this table
-    # keys = ([Key(), Key()],)
-    # timestamp = (
-    #     Timestamp(name=&#34;last_updated&#34;, human_datatype=String, format=&#34;yyyyMMdd|hh:ss&#34;),
-    # )
-    # # the features provided; in database terms, the schema
-    # # `keys` and `timestamp` can be treated by the user as if they were defined as output_features, but the user does not need to include them here
-    # output_features = (
-    #     [
-    #         Feature(),
-    #         Feature(),
-    #     ],
-    # )
-    # # Any data quality or data distribution checks that should be performed before passing this data downstream
-    # data_checks = (&#34;&#34;,)</code></pre>
+    keys: List[Key]
+    &#34;&#34;&#34;
+    The unique keys that describe the entity contained within this table.  For example, [user_id, transaction_id}.
+    Often referred to as:
+    * Primary key
+    * Data grain
+    * Entity
+    * ... others ...
+    &#34;&#34;&#34;
+
+    # TODO: Other feature stores split out entity to a top level object.  Why is this?  I keep thinking it feels redundant but maybe there is an advantage to having shared entities when it comes to collaboration particularly when teams are sharing features about many common entities such as users?
+
+    timestamp: Timestamp
+    &#34;&#34;&#34;
+    Which column of data has the timestamp of the record?
+    Used to support time-travel-aware joins.
+    &#34;&#34;&#34;
+
+    output_features: List[Feature]
+    &#34;&#34;&#34;
+    The `Features` delivered by a InputDataProvider confirming to this `InputDataSchema`.
+    
+    In database terms, the schema.
+
+    `keys` and `timestamp` can be treated by the user as if they were defined as output_features.  Orchestra automatically appends these Features to the list.
+    &#34;&#34;&#34;
+
+    data_checks: List[DataCheck]
+    &#34;&#34;&#34;
+    Any data quality or data distribution checks that should be performed on the incoming data.  Executed by Orchesrta using the user&#39;s supplied checking framwork.
+    &#34;&#34;&#34;</code></pre>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="data.InputDataView.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dt id="data.InputDataSchema.data_checks"><code class="name">var <span class="ident">data_checks</span> : List[<a title="data.DataCheck" href="#data.DataCheck">DataCheck</a>]</code></dt>
+<dd>
+<div class="desc"><p>Any data quality or data distribution checks that should be performed on the incoming data.
+Executed by Orchesrta using the user's supplied checking framwork.</p></div>
+</dd>
+<dt id="data.InputDataSchema.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
 <dd>
 <div class="desc"><p>Human-readable notes</p></div>
 </dd>
-<dt id="data.InputDataView.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dt id="data.InputDataSchema.keys"><code class="name">var <span class="ident">keys</span> : List[<a title="data.Key" href="#data.Key">Key</a>]</code></dt>
+<dd>
+<div class="desc"><p>The unique keys that describe the entity contained within this table.
+For example, [user_id, transaction_id}.
+Often referred to as:
+* Primary key
+* Data grain
+* Entity
+* &hellip; others &hellip;</p></div>
+</dd>
+<dt id="data.InputDataSchema.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
 <div class="desc"><p>Machine-readable but human-understandable name</p></div>
+</dd>
+<dt id="data.InputDataSchema.output_features"><code class="name">var <span class="ident">output_features</span> : List[<a title="data.Feature" href="#data.Feature">Feature</a>]</code></dt>
+<dd>
+<div class="desc"><p>The <code>Features</code> delivered by a InputDataProvider confirming to this <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code>.</p>
+<p>In database terms, the schema.</p>
+<p><code>keys</code> and <code>timestamp</code> can be treated by the user as if they were defined as output_features.
+Orchestra automatically appends these Features to the list.</p></div>
+</dd>
+<dt id="data.InputDataSchema.timestamp"><code class="name">var <span class="ident">timestamp</span> : <a title="data.Timestamp" href="#data.Timestamp">Timestamp</a></code></dt>
+<dd>
+<div class="desc"><p>Which column of data has the timestamp of the record?
+Used to support time-travel-aware joins.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="data.InputDataSource"><code class="flex name class">
+<span>class <span class="ident">InputDataSource</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p><code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code> defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.</p>
+<p><code>InputDataProviders</code> defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code>.</p>
+<p>Together, <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code> and <code>InputDataProviders</code> are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).</p>
+<p>Why separate <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code> from the <code>InputDataProviders</code>?</p>
+<p>Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).</p>
+<p>Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.</p>
+<p>The <code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code> abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputDataSource:
+    &#34;&#34;&#34;
+    `InputDataSchema` defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.
+
+    `InputDataProviders` defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by `InputDataSchema`.
+
+    Together, `InputDataSchema` and `InputDataProviders` are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).
+
+    Why separate `InputDataSchema` from the `InputDataProviders`?
+
+    Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).
+
+    Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.
+
+    The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
+    &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    provider: DataProviderType
+    &#34;&#34;&#34;
+    What is the actual infra?  BigQuery, Snowflake, S3, Google Sheests, Kafka, etc
+    &#34;&#34;&#34;
+
+    provider_config: DataProviderConfig
+    &#34;&#34;&#34;
+    Configuration settings for a specific provider
+    For example:
+    [1] S3 path + credentials
+    [2] BigQuery database URI + credentials
+    [3] DBT model directory + run command&#34;&#34;&#34;
+
+    environment: Set[EnvironmentType]
+    &#34;&#34;&#34;
+    In which environments is this data available for use?  Use cases:
+    [1] Have seperate DatasetProviders in development vs. production (e.g,. use a local CSV export of sensitive data that&#39;s only available with machine-level credentials, etc)
+    [2] Have multiple production DatasetProviders e.g., Kafka + Snowflake where one provider is used for second- latency features and the other used for week+ latency features.
+    &#34;&#34;&#34;
+
+    # TODO: Do we need a way to run DataCode() on a InputDataProvider?  or, should this be handled by each provider&#39;s config?  An example use case might be changing column names, dropping rows that are &gt;x% null, filtering out known bad rows, etc.  I lean to yes...</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="data.InputDataSource.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Human-readable notes</p></div>
+</dd>
+<dt id="data.InputDataSource.environment"><code class="name">var <span class="ident">environment</span> : Set[<a title="environments.EnvironmentType" href="environments.html#environments.EnvironmentType">EnvironmentType</a>]</code></dt>
+<dd>
+<div class="desc"><p>In which environments is this data available for use?
+Use cases:
+[1] Have seperate DatasetProviders in development vs. production (e.g,. use a local CSV export of sensitive data that's only available with machine-level credentials, etc)
+[2] Have multiple production DatasetProviders e.g., Kafka + Snowflake where one provider is used for second- latency features and the other used for week+ latency features.</p></div>
+</dd>
+<dt id="data.InputDataSource.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+</dd>
+<dt id="data.InputDataSource.provider"><code class="name">var <span class="ident">provider</span> : <a title="dataproviders.DataProviderType" href="dataproviders.html#dataproviders.DataProviderType">DataProviderType</a></code></dt>
+<dd>
+<div class="desc"><p>What is the actual infra?
+BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
+</dd>
+<dt id="data.InputDataSource.provider_config"><code class="name">var <span class="ident">provider_config</span> : <a title="data.DataProviderConfig" href="#data.DataProviderConfig">DataProviderConfig</a></code></dt>
+<dd>
+<div class="desc"><p>Configuration settings for a specific provider
+For example:
+[1] S3 path + credentials
+[2] BigQuery database URI + credentials
+[3] DBT model directory + run command</p></div>
+</dd>
+<dt id="data.InputDataSource.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="data.Tag" href="#data.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
 </dd>
 </dl>
 </dd>
@@ -1125,6 +1495,7 @@ Used for aggregations and lookups.</p></div>
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1166,6 +1537,7 @@ Used for aggregations and lookups.</p></div>
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1182,6 +1554,11 @@ Used for aggregations and lookups.</p></div>
 <pre><code class="python">class MLTransformation:
     &#34;&#34;&#34;
     Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;
 
     input_datatype: List[DataType]
@@ -1228,6 +1605,10 @@ Examples include image transformations (resize, etc) or embedding models, token 
 <h1 id="todo-any-use-cases-for-joins-or-aggregation-aka-group-by-i-dont-think-so">TODO: Any use cases for joins or aggregation aka GROUP BY?
 I don't think so&hellip;</h1></div>
 </dd>
+<dt id="data.MLTransformation.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="data.Tag" href="#data.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
 </dl>
 </dd>
 <dt id="data.ModelEncoderTransformation"><code class="flex name class">
@@ -1264,9 +1645,25 @@ I don't think so&hellip;</h1></div>
 <li><code><a title="data.MLTransformation.input_datatype" href="#data.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.output_datatype" href="#data.MLTransformation.output_datatype">output_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.records_needed" href="#data.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="data.MLTransformation.tags" href="#data.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
+</dd>
+<dt id="data.OutputDataSink"><code class="flex name class">
+<span>class <span class="ident">OutputDataSink</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OutputDataSink:
+    &#34;&#34;&#34; &#34;&#34;&#34;
+
+    # TODO: Add in the concept of a data sink.  How will we save things like prediction logs, cached training data, etc.</code></pre>
+</details>
 </dd>
 <dt id="data.Prediction"><code class="flex name class">
 <span>class <span class="ident">Prediction</span></span>
@@ -1331,6 +1728,7 @@ References a specific version. The Model object includes all metadata &amp; line
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1385,6 +1783,7 @@ If a value here is “bad” - it is 100% the fault of the DataProvider's owner 
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1423,6 +1822,7 @@ If it's wrong it is the upstream provider's fault ;-)</p></div>
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1459,9 +1859,46 @@ If it's wrong it is the upstream provider's fault ;-)</p></div>
 <li><code><a title="data.MLTransformation.input_datatype" href="#data.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.output_datatype" href="#data.MLTransformation.output_datatype">output_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.records_needed" href="#data.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="data.MLTransformation.tags" href="#data.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
+</dd>
+<dt id="data.Tag"><code class="flex name class">
+<span>class <span class="ident">Tag</span></span>
+<span>(</span><span>iterable=(), /)</span>
+</code></dt>
+<dd>
+<div class="desc"><p>key: value pair that is user definable.
+Used to store information on any top-level object.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Tag(Tuple):
+    &#34;&#34;&#34;key: value pair that is user definable.
+    Used to store information on any top-level object.
+    &#34;&#34;&#34;
+
+    key: str
+    value: str</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.tuple</li>
+<li>typing.Generic</li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="data.Tag.key"><code class="name">var <span class="ident">key</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="data.Tag.value"><code class="name">var <span class="ident">value</span> : str</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
 </dd>
 <dt id="data.Timestamp"><code class="flex name class">
 <span>class <span class="ident">Timestamp</span></span>
@@ -1520,6 +1957,7 @@ Used for time-travel and time-aware joins.</p></div>
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1550,6 +1988,9 @@ Used for time-travel and time-aware joins.</p></div>
 </li>
 <li>
 <h4><code><a title="data.Code" href="#data.Code">Code</a></code></h4>
+<ul class="">
+<li><code><a title="data.Code.tags" href="#data.Code.tags">tags</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="data.CustomTransformation" href="#data.CustomTransformation">CustomTransformation</a></code></h4>
@@ -1559,6 +2000,9 @@ Used for time-travel and time-aware joins.</p></div>
 </li>
 <li>
 <h4><code><a title="data.DataCheck" href="#data.DataCheck">DataCheck</a></code></h4>
+<ul class="">
+<li><code><a title="data.DataCheck.tags" href="#data.DataCheck.tags">tags</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="data.DataChecksForFeature" href="#data.DataChecksForFeature">DataChecksForFeature</a></code></h4>
@@ -1574,6 +2018,9 @@ Used for time-travel and time-aware joins.</p></div>
 <ul class="">
 <li><code><a title="data.DataCode.records_needed" href="#data.DataCode.records_needed">records_needed</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="data.DataProviderConfig" href="#data.DataProviderConfig">DataProviderConfig</a></code></h4>
 </li>
 <li>
 <h4><code><a title="data.DerivedFeature" href="#data.DerivedFeature">DerivedFeature</a></code></h4>
@@ -1594,13 +2041,29 @@ Used for time-travel and time-aware joins.</p></div>
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+<li><code><a title="data.Feature.tags" href="#data.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 <li>
-<h4><code><a title="data.InputDataView" href="#data.InputDataView">InputDataView</a></code></h4>
-<ul class="">
-<li><code><a title="data.InputDataView.description" href="#data.InputDataView.description">description</a></code></li>
-<li><code><a title="data.InputDataView.name" href="#data.InputDataView.name">name</a></code></li>
+<h4><code><a title="data.InputDataSchema" href="#data.InputDataSchema">InputDataSchema</a></code></h4>
+<ul class="two-column">
+<li><code><a title="data.InputDataSchema.data_checks" href="#data.InputDataSchema.data_checks">data_checks</a></code></li>
+<li><code><a title="data.InputDataSchema.description" href="#data.InputDataSchema.description">description</a></code></li>
+<li><code><a title="data.InputDataSchema.keys" href="#data.InputDataSchema.keys">keys</a></code></li>
+<li><code><a title="data.InputDataSchema.name" href="#data.InputDataSchema.name">name</a></code></li>
+<li><code><a title="data.InputDataSchema.output_features" href="#data.InputDataSchema.output_features">output_features</a></code></li>
+<li><code><a title="data.InputDataSchema.timestamp" href="#data.InputDataSchema.timestamp">timestamp</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="data.InputDataSource" href="#data.InputDataSource">InputDataSource</a></code></h4>
+<ul class="two-column">
+<li><code><a title="data.InputDataSource.description" href="#data.InputDataSource.description">description</a></code></li>
+<li><code><a title="data.InputDataSource.environment" href="#data.InputDataSource.environment">environment</a></code></li>
+<li><code><a title="data.InputDataSource.name" href="#data.InputDataSource.name">name</a></code></li>
+<li><code><a title="data.InputDataSource.provider" href="#data.InputDataSource.provider">provider</a></code></li>
+<li><code><a title="data.InputDataSource.provider_config" href="#data.InputDataSource.provider_config">provider_config</a></code></li>
+<li><code><a title="data.InputDataSource.tags" href="#data.InputDataSource.tags">tags</a></code></li>
 </ul>
 </li>
 <li>
@@ -1618,6 +2081,7 @@ Used for time-travel and time-aware joins.</p></div>
 <li><code><a title="data.MLTransformation.input_datatype" href="#data.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.output_datatype" href="#data.MLTransformation.output_datatype">output_datatype</a></code></li>
 <li><code><a title="data.MLTransformation.records_needed" href="#data.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="data.MLTransformation.tags" href="#data.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 <li>
@@ -1625,6 +2089,9 @@ Used for time-travel and time-aware joins.</p></div>
 <ul class="">
 <li><code><a title="data.ModelEncoderTransformation.model" href="#data.ModelEncoderTransformation.model">model</a></code></li>
 </ul>
+</li>
+<li>
+<h4><code><a title="data.OutputDataSink" href="#data.OutputDataSink">OutputDataSink</a></code></h4>
 </li>
 <li>
 <h4><code><a title="data.Prediction" href="#data.Prediction">Prediction</a></code></h4>
@@ -1644,6 +2111,13 @@ Used for time-travel and time-aware joins.</p></div>
 </li>
 <li>
 <h4><code><a title="data.SciKitLearnTransformation" href="#data.SciKitLearnTransformation">SciKitLearnTransformation</a></code></h4>
+</li>
+<li>
+<h4><code><a title="data.Tag" href="#data.Tag">Tag</a></code></h4>
+<ul class="">
+<li><code><a title="data.Tag.key" href="#data.Tag.key">key</a></code></li>
+<li><code><a title="data.Tag.value" href="#data.Tag.value">value</a></code></li>
+</ul>
 </li>
 <li>
 <h4><code><a title="data.Timestamp" href="#data.Timestamp">Timestamp</a></code></h4>
