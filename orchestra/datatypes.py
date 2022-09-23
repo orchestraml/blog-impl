@@ -2,6 +2,8 @@ from typing import (
     Literal,
 )
 
+# TODO: Do we need a data type for Array or List?
+
 
 class DataType:
     """
