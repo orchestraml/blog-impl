@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>model API documentation</title>
+<title>datacode API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,19 +19,22 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>model</code></h1>
+<h1 class="title">Module <code>datacode</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from common import Tag
-from typing import Set, Optional
+<pre><code class="python">from typing import Literal, Set, Optional
+from common import Tag
 
 
-class Model:
-    &#34;&#34;&#34; &#34;&#34;&#34;
+class Code:
+    &#34;&#34;&#34;
+    Parent class of all code types.
+    Throws an error if used directly.
+    &#34;&#34;&#34;
 
     name: str
     &#34;&#34;&#34;
@@ -46,6 +49,25 @@ class Model:
     tags: Set[Tag]
     &#34;&#34;&#34;
     Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+
+class DataCode(Code):
+    &#34;&#34;&#34;
+    Code that takes 1+ Features and returns 1+ Features
+
+    &#34;&#34;&#34;
+
+    input_records_needed = Literal[&#34;SingleRecord&#34;, &#34;Aggregation&#34;, &#34;AllRecords&#34;, &#34;Join&#34;]
+    &#34;&#34;&#34;
+    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)
+
+    Aggregation: Requires multiple records of data from the same GROUP BY features.
+
+    Join: Requires records obtained by joining to a Dataset with differnet Key(s)
+
+    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
+
     &#34;&#34;&#34;</code></pre>
 </details>
 </section>
@@ -58,17 +80,21 @@ class Model:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="model.Model"><code class="flex name class">
-<span>class <span class="ident">Model</span></span>
+<dt id="datacode.Code"><code class="flex name class">
+<span>class <span class="ident">Code</span></span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>Parent class of all code types.
+Throws an error if used directly.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Model:
-    &#34;&#34;&#34; &#34;&#34;&#34;
+<pre><code class="python">class Code:
+    &#34;&#34;&#34;
+    Parent class of all code types.
+    Throws an error if used directly.
+    &#34;&#34;&#34;
 
     name: str
     &#34;&#34;&#34;
@@ -85,21 +111,81 @@ class Model:
     Human or machine defined tags for easy indexing and reference
     &#34;&#34;&#34;</code></pre>
 </details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="datacode.DataCode" href="#datacode.DataCode">DataCode</a></li>
+</ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="model.Model.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
+<dt id="datacode.Code.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>Human-readable notes</p></div>
 </dd>
-<dt id="model.Model.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dt id="datacode.Code.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
 <div class="desc"><p>Machine-readable but human-understandable name</p></div>
 </dd>
-<dt id="model.Model.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
+<dt id="datacode.Code.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
 <dd>
 <div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
 </dd>
 </dl>
+</dd>
+<dt id="datacode.DataCode"><code class="flex name class">
+<span>class <span class="ident">DataCode</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Code that takes 1+ Features and returns 1+ Features</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataCode(Code):
+    &#34;&#34;&#34;
+    Code that takes 1+ Features and returns 1+ Features
+
+    &#34;&#34;&#34;
+
+    input_records_needed = Literal[&#34;SingleRecord&#34;, &#34;Aggregation&#34;, &#34;AllRecords&#34;, &#34;Join&#34;]
+    &#34;&#34;&#34;
+    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)
+
+    Aggregation: Requires multiple records of data from the same GROUP BY features.
+
+    Join: Requires records obtained by joining to a Dataset with differnet Key(s)
+
+    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
+
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="datacode.Code" href="#datacode.Code">Code</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="feature.Aggregation" href="feature.html#feature.Aggregation">Aggregation</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="datacode.DataCode.input_records_needed"><code class="name">var <span class="ident">input_records_needed</span></code></dt>
+<dd>
+<div class="desc"><p>(default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)</p>
+<p>Aggregation: Requires multiple records of data from the same GROUP BY features.</p>
+<p>Join: Requires records obtained by joining to a Dataset with differnet Key(s)</p>
+<p>AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="datacode.Code" href="#datacode.Code">Code</a></b></code>:
+<ul class="hlist">
+<li><code><a title="datacode.Code.description" href="#datacode.Code.description">description</a></code></li>
+<li><code><a title="datacode.Code.name" href="#datacode.Code.name">name</a></code></li>
+<li><code><a title="datacode.Code.tags" href="#datacode.Code.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
 </dd>
 </dl>
 </section>
@@ -113,11 +199,17 @@ class Model:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="model.Model" href="#model.Model">Model</a></code></h4>
+<h4><code><a title="datacode.Code" href="#datacode.Code">Code</a></code></h4>
 <ul class="">
-<li><code><a title="model.Model.description" href="#model.Model.description">description</a></code></li>
-<li><code><a title="model.Model.name" href="#model.Model.name">name</a></code></li>
-<li><code><a title="model.Model.tags" href="#model.Model.tags">tags</a></code></li>
+<li><code><a title="datacode.Code.description" href="#datacode.Code.description">description</a></code></li>
+<li><code><a title="datacode.Code.name" href="#datacode.Code.name">name</a></code></li>
+<li><code><a title="datacode.Code.tags" href="#datacode.Code.tags">tags</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="datacode.DataCode" href="#datacode.DataCode">DataCode</a></code></h4>
+<ul class="">
+<li><code><a title="datacode.DataCode.input_records_needed" href="#datacode.DataCode.input_records_needed">input_records_needed</a></code></li>
 </ul>
 </li>
 </ul>

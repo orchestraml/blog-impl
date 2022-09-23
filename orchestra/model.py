@@ -1,5 +1,5 @@
 from common import Tag
-from typing import Set
+from typing import Set, Optional
 
 
 class Model:
@@ -10,7 +10,7 @@ class Model:
     Machine-readable but human-understandable name
     """
 
-    description: str
+    description: Optional[str]
     """
     Human-readable notes
     """

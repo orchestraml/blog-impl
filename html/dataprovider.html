@@ -26,9 +26,10 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from typing import List, Set
+<pre><code class="python">from typing import List, Set, Optional
 
-from feature import Key, Timestamp, Feature, DataCheck
+from feature import Key, Timestamp, Feature
+from datachecks import DataCheck
 from environment import EnvironmentType
 from common import Tag
 
@@ -63,7 +64,7 @@ class InputDataSchema:
     Machine-readable but human-understandable name
     &#34;&#34;&#34;
 
-    description: str
+    description: Optional[str]
     &#34;&#34;&#34;
     Human-readable notes
     &#34;&#34;&#34;
@@ -140,7 +141,7 @@ class InputDataSource:
     Machine-readable but human-understandable name
     &#34;&#34;&#34;
 
-    description: str
+    description: Optional[str]
     &#34;&#34;&#34;
     Human-readable notes
     &#34;&#34;&#34;
@@ -268,7 +269,7 @@ BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
     Machine-readable but human-understandable name
     &#34;&#34;&#34;
 
-    description: str
+    description: Optional[str]
     &#34;&#34;&#34;
     Human-readable notes
     &#34;&#34;&#34;
@@ -312,12 +313,12 @@ BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="dataprovider.InputDataSchema.data_checks"><code class="name">var <span class="ident">data_checks</span> : List[<a title="feature.DataCheck" href="feature.html#feature.DataCheck">DataCheck</a>]</code></dt>
+<dt id="dataprovider.InputDataSchema.data_checks"><code class="name">var <span class="ident">data_checks</span> : List[<a title="datachecks.DataCheck" href="datachecks.html#datachecks.DataCheck">DataCheck</a>]</code></dt>
 <dd>
 <div class="desc"><p>Any data quality or data distribution checks that should be performed on the incoming data.
 Executed by Orchesrta using the user's supplied checking framwork.</p></div>
 </dd>
-<dt id="dataprovider.InputDataSchema.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dt id="dataprovider.InputDataSchema.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>Human-readable notes</p></div>
 </dd>
@@ -390,7 +391,7 @@ Used to support time-travel-aware joins.</p></div>
     Machine-readable but human-understandable name
     &#34;&#34;&#34;
 
-    description: str
+    description: Optional[str]
     &#34;&#34;&#34;
     Human-readable notes
     &#34;&#34;&#34;
@@ -424,7 +425,7 @@ Used to support time-travel-aware joins.</p></div>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="dataprovider.InputDataSource.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dt id="dataprovider.InputDataSource.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>Human-readable notes</p></div>
 </dd>

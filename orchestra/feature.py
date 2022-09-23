@@ -7,70 +7,26 @@ from typing import List, Optional, Literal, Tuple, Set
 
 
 from datatype import DataType
-from environment import EnvironmentType
 from datetime import timedelta
 from model import Model
 from common import Tag
-
-
-class DataCheck:
-    """
-
-    Placeholder for Deequ, PyTest, great_expectation based checks
-    """
-
-    tags: Set[Tag]
-    """
-    Human or machine defined tags for easy indexing and reference
-    """
-
-    # TODO: Flesh out data checks.
-    # [1] Do we actually need these on ml_transformations?  If so, how do we provide checks for each individual ml_transformation since they are discrete?
-    # [2] What libraries do we support and in what order?  deequ, great_expectaions, pytest
-    # [3] Where do these get run?  How can we push this to the customer's data infra?
-
-
-class DataChecksForFeature:
-    raw_input_features: Optional[DataCheck]
-    raw_input_lookups: Optional[DataCheck]
-    post_business_logic: Optional[DataCheck]
-    post_ml_transformation: Optional[DataCheck]
-
-
-class Code:
-    """
-    Parent class of all code types.
-    Throws an error if used directly.
-    """
-
-    tags: Set[Tag]
-    """
-    Human or machine defined tags for easy indexing and reference
-    """
-
-
-class DataCode(Code):
-    """
-    Code that takes 1+ Features and returns 1+ Features
-
-    """
-
-    records_needed = Literal["SingleRecord", "Aggregation", "AllRecords", "Join"]
-    """
-    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)
-
-    Aggregation: Requires multiple records of data from the same GROUP BY features.
-
-    Join: Requires records obtained by joining to a Dataset with differnet Key(s)
-
-    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
-
-    """
+from datacode import DataCode
+from datachecks import DataChecksForFeature
 
 
 class MLTransformation:
     """
     Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
+    """
+
+    name: str
+    """
+    Machine-readable but human-understandable name
+    """
+
+    description: Optional[str]
+    """
+    Human-readable notes
     """
 
     tags: Set[Tag]
@@ -88,7 +44,7 @@ class MLTransformation:
     What DataType(s) does this transformation output?
     """
 
-    records_needed = Literal["SingleRecord", "AllRecords"]
+    input_records_needed = Literal["SingleRecord", "AllRecords"]
     """
     (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed).  Examples include image transformations (resize, etc) or embedding models, token lookups, etc.
 
@@ -170,7 +126,7 @@ class Feature:
     Machine-readable but human-understandable name
     """
 
-    description: str
+    description: Optional[str]
     """
     Human-readable notes
     """

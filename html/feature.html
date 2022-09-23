@@ -35,70 +35,26 @@ from typing import List, Optional, Literal, Tuple, Set
 
 
 from datatype import DataType
-from environment import EnvironmentType
 from datetime import timedelta
 from model import Model
 from common import Tag
-
-
-class DataCheck:
-    &#34;&#34;&#34;
-
-    Placeholder for Deequ, PyTest, great_expectation based checks
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
-    &#34;&#34;&#34;
-
-    # TODO: Flesh out data checks.
-    # [1] Do we actually need these on ml_transformations?  If so, how do we provide checks for each individual ml_transformation since they are discrete?
-    # [2] What libraries do we support and in what order?  deequ, great_expectaions, pytest
-    # [3] Where do these get run?  How can we push this to the customer&#39;s data infra?
-
-
-class DataChecksForFeature:
-    raw_input_features: Optional[DataCheck]
-    raw_input_lookups: Optional[DataCheck]
-    post_business_logic: Optional[DataCheck]
-    post_ml_transformation: Optional[DataCheck]
-
-
-class Code:
-    &#34;&#34;&#34;
-    Parent class of all code types.
-    Throws an error if used directly.
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
-    &#34;&#34;&#34;
-
-
-class DataCode(Code):
-    &#34;&#34;&#34;
-    Code that takes 1+ Features and returns 1+ Features
-
-    &#34;&#34;&#34;
-
-    records_needed = Literal[&#34;SingleRecord&#34;, &#34;Aggregation&#34;, &#34;AllRecords&#34;, &#34;Join&#34;]
-    &#34;&#34;&#34;
-    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)
-
-    Aggregation: Requires multiple records of data from the same GROUP BY features.
-
-    Join: Requires records obtained by joining to a Dataset with differnet Key(s)
-
-    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
-
-    &#34;&#34;&#34;
+from datacode import DataCode
+from datachecks import DataChecksForFeature
 
 
 class MLTransformation:
     &#34;&#34;&#34;
     Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
+    &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: Optional[str]
+    &#34;&#34;&#34;
+    Human-readable notes
     &#34;&#34;&#34;
 
     tags: Set[Tag]
@@ -116,7 +72,7 @@ class MLTransformation:
     What DataType(s) does this transformation output?
     &#34;&#34;&#34;
 
-    records_needed = Literal[&#34;SingleRecord&#34;, &#34;AllRecords&#34;]
+    input_records_needed = Literal[&#34;SingleRecord&#34;, &#34;AllRecords&#34;]
     &#34;&#34;&#34;
     (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed).  Examples include image transformations (resize, etc) or embedding models, token lookups, etc.
 
@@ -198,7 +154,7 @@ class Feature:
     Machine-readable but human-understandable name
     &#34;&#34;&#34;
 
-    description: str
+    description: Optional[str]
     &#34;&#34;&#34;
     Human-readable notes
     &#34;&#34;&#34;
@@ -507,8 +463,8 @@ class Aggregation(DataCode):
 </details>
 <h3>Ancestors</h3>
 <ul class="hlist">
-<li><a title="feature.DataCode" href="#feature.DataCode">DataCode</a></li>
-<li><a title="feature.Code" href="#feature.Code">Code</a></li>
+<li><a title="datacode.DataCode" href="datacode.html#datacode.DataCode">DataCode</a></li>
+<li><a title="datacode.Code" href="datacode.html#datacode.Code">Code</a></li>
 </ul>
 <h3>Class variables</h3>
 <dl>
@@ -524,7 +480,7 @@ class Aggregation(DataCode):
 <p>SELECT aggregate_function(Feature) FROM &hellip;</p>
 <p>Credit: Portions borrowed from the Feathr spec</p></div>
 </dd>
-<dt id="feature.Aggregation.custom_function"><code class="name">var <span class="ident">custom_function</span> : Optional[<a title="feature.DataCode" href="#feature.DataCode">DataCode</a>]</code></dt>
+<dt id="feature.Aggregation.custom_function"><code class="name">var <span class="ident">custom_function</span> : Optional[DataCode]</code></dt>
 <dd>
 <div class="desc"><p>TODO: define the limits of what types of DataCode can be provided here</p></div>
 </dd>
@@ -532,6 +488,10 @@ class Aggregation(DataCode):
 <dd>
 <div class="desc"><p>Features to sort the records by</p>
 <p>Only applies if window is a last N records.</p></div>
+</dd>
+<dt id="feature.Aggregation.records_needed"><code class="name">var <span class="ident">records_needed</span> : Literal['<a title="feature.Aggregation" href="#feature.Aggregation">Aggregation</a>']</code></dt>
+<dd>
+<div class="desc"><p>Default value, can't be changed</p></div>
 </dd>
 <dt id="feature.Aggregation.window"><code class="name">var <span class="ident">window</span> : str</code></dt>
 <dd>
@@ -549,14 +509,16 @@ Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
 </dl>
 <h3>Inherited members</h3>
 <ul class="hlist">
-<li><code><b><a title="feature.DataCode" href="#feature.DataCode">DataCode</a></b></code>:
+<li><code><b><a title="datacode.DataCode" href="datacode.html#datacode.DataCode">DataCode</a></b></code>:
 <ul class="hlist">
-<li><code><a title="feature.DataCode.records_needed" href="#feature.DataCode.records_needed">records_needed</a></code></li>
+<li><code><a title="datacode.DataCode.input_records_needed" href="datacode.html#datacode.DataCode.input_records_needed">input_records_needed</a></code></li>
 </ul>
 </li>
-<li><code><b><a title="feature.Code" href="#feature.Code">Code</a></b></code>:
+<li><code><b><a title="datacode.Code" href="datacode.html#datacode.Code">Code</a></b></code>:
 <ul class="hlist">
-<li><code><a title="feature.Code.tags" href="#feature.Code.tags">tags</a></code></li>
+<li><code><a title="datacode.Code.description" href="datacode.html#datacode.Code.description">description</a></code></li>
+<li><code><a title="datacode.Code.name" href="datacode.html#datacode.Code.name">name</a></code></li>
+<li><code><a title="datacode.Code.tags" href="datacode.html#datacode.Code.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -588,46 +550,15 @@ Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
 <ul class="hlist">
 <li><code><b><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></b></code>:
 <ul class="hlist">
+<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
+<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.records_needed" href="#feature.MLTransformation.records_needed">records_needed</a></code></li>
 <li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
-</dd>
-<dt id="feature.Code"><code class="flex name class">
-<span>class <span class="ident">Code</span></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Parent class of all code types.
-Throws an error if used directly.</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class Code:
-    &#34;&#34;&#34;
-    Parent class of all code types.
-    Throws an error if used directly.
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
-    &#34;&#34;&#34;</code></pre>
-</details>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="feature.DataCode" href="#feature.DataCode">DataCode</a></li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="feature.Code.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
-<dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
-</dd>
-</dl>
 </dd>
 <dt id="feature.CustomTransformation"><code class="flex name class">
 <span>class <span class="ident">CustomTransformation</span></span>
@@ -656,7 +587,7 @@ Throws an error if used directly.</p></div>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="feature.CustomTransformation.data_code"><code class="name">var <span class="ident">data_code</span> : <a title="feature.DataCode" href="#feature.DataCode">DataCode</a></code></dt>
+<dt id="feature.CustomTransformation.data_code"><code class="name">var <span class="ident">data_code</span> : <a title="datacode.DataCode" href="datacode.html#datacode.DataCode">DataCode</a></code></dt>
 <dd>
 <div class="desc"><p>the code used to deliver this transformation</p></div>
 </dd>
@@ -665,132 +596,12 @@ Throws an error if used directly.</p></div>
 <ul class="hlist">
 <li><code><b><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></b></code>:
 <ul class="hlist">
+<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
+<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.records_needed" href="#feature.MLTransformation.records_needed">records_needed</a></code></li>
 <li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
-</ul>
-</li>
-</ul>
-</dd>
-<dt id="feature.DataCheck"><code class="flex name class">
-<span>class <span class="ident">DataCheck</span></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Placeholder for Deequ, PyTest, great_expectation based checks</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class DataCheck:
-    &#34;&#34;&#34;
-
-    Placeholder for Deequ, PyTest, great_expectation based checks
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
-    &#34;&#34;&#34;
-
-    # TODO: Flesh out data checks.
-    # [1] Do we actually need these on ml_transformations?  If so, how do we provide checks for each individual ml_transformation since they are discrete?
-    # [2] What libraries do we support and in what order?  deequ, great_expectaions, pytest
-    # [3] Where do these get run?  How can we push this to the customer&#39;s data infra?</code></pre>
-</details>
-<h3>Class variables</h3>
-<dl>
-<dt id="feature.DataCheck.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
-<dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
-</dd>
-</dl>
-</dd>
-<dt id="feature.DataChecksForFeature"><code class="flex name class">
-<span>class <span class="ident">DataChecksForFeature</span></span>
-</code></dt>
-<dd>
-<div class="desc"></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class DataChecksForFeature:
-    raw_input_features: Optional[DataCheck]
-    raw_input_lookups: Optional[DataCheck]
-    post_business_logic: Optional[DataCheck]
-    post_ml_transformation: Optional[DataCheck]</code></pre>
-</details>
-<h3>Class variables</h3>
-<dl>
-<dt id="feature.DataChecksForFeature.post_business_logic"><code class="name">var <span class="ident">post_business_logic</span> : Optional[<a title="feature.DataCheck" href="#feature.DataCheck">DataCheck</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="feature.DataChecksForFeature.post_ml_transformation"><code class="name">var <span class="ident">post_ml_transformation</span> : Optional[<a title="feature.DataCheck" href="#feature.DataCheck">DataCheck</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="feature.DataChecksForFeature.raw_input_features"><code class="name">var <span class="ident">raw_input_features</span> : Optional[<a title="feature.DataCheck" href="#feature.DataCheck">DataCheck</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-<dt id="feature.DataChecksForFeature.raw_input_lookups"><code class="name">var <span class="ident">raw_input_lookups</span> : Optional[<a title="feature.DataCheck" href="#feature.DataCheck">DataCheck</a>]</code></dt>
-<dd>
-<div class="desc"></div>
-</dd>
-</dl>
-</dd>
-<dt id="feature.DataCode"><code class="flex name class">
-<span>class <span class="ident">DataCode</span></span>
-</code></dt>
-<dd>
-<div class="desc"><p>Code that takes 1+ Features and returns 1+ Features</p></div>
-<details class="source">
-<summary>
-<span>Expand source code</span>
-</summary>
-<pre><code class="python">class DataCode(Code):
-    &#34;&#34;&#34;
-    Code that takes 1+ Features and returns 1+ Features
-
-    &#34;&#34;&#34;
-
-    records_needed = Literal[&#34;SingleRecord&#34;, &#34;Aggregation&#34;, &#34;AllRecords&#34;, &#34;Join&#34;]
-    &#34;&#34;&#34;
-    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)
-
-    Aggregation: Requires multiple records of data from the same GROUP BY features.
-
-    Join: Requires records obtained by joining to a Dataset with differnet Key(s)
-
-    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
-
-    &#34;&#34;&#34;</code></pre>
-</details>
-<h3>Ancestors</h3>
-<ul class="hlist">
-<li><a title="feature.Code" href="#feature.Code">Code</a></li>
-</ul>
-<h3>Subclasses</h3>
-<ul class="hlist">
-<li><a title="feature.Aggregation" href="#feature.Aggregation">Aggregation</a></li>
-</ul>
-<h3>Class variables</h3>
-<dl>
-<dt id="feature.DataCode.records_needed"><code class="name">var <span class="ident">records_needed</span></code></dt>
-<dd>
-<div class="desc"><p>(default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)</p>
-<p>Aggregation: Requires multiple records of data from the same GROUP BY features.</p>
-<p>Join: Requires records obtained by joining to a Dataset with differnet Key(s)</p>
-<p>AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)</p></div>
-</dd>
-</dl>
-<h3>Inherited members</h3>
-<ul class="hlist">
-<li><code><b><a title="feature.Code" href="#feature.Code">Code</a></b></code>:
-<ul class="hlist">
-<li><code><a title="feature.Code.tags" href="#feature.Code.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -911,7 +722,7 @@ class Feature:
     Machine-readable but human-understandable name
     &#34;&#34;&#34;
 
-    description: str
+    description: Optional[str]
     &#34;&#34;&#34;
     Human-readable notes
     &#34;&#34;&#34;
@@ -994,7 +805,7 @@ class Feature:
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="feature.Feature.business_logics"><code class="name">var <span class="ident">business_logics</span> : Optional[List[<a title="feature.DataCode" href="#feature.DataCode">DataCode</a>]]</code></dt>
+<dt id="feature.Feature.business_logics"><code class="name">var <span class="ident">business_logics</span> : Optional[List[<a title="datacode.DataCode" href="datacode.html#datacode.DataCode">DataCode</a>]]</code></dt>
 <dd>
 <div class="desc"><p>Optional. Business logic that translates the input_features into this feature.
 Each provided DataCode is executed in order, passing information between steps.</p>
@@ -1011,12 +822,12 @@ Some say “feature engineering”, some say “pre-processing”, some use a co
 Potato-patato.
 Irregardless of what you call it, folks apply business logic, then transform everything to numbers.</p></div>
 </dd>
-<dt id="feature.Feature.data_checks"><code class="name">var <span class="ident">data_checks</span> : Optional[<a title="feature.DataChecksForFeature" href="#feature.DataChecksForFeature">DataChecksForFeature</a>]</code></dt>
+<dt id="feature.Feature.data_checks"><code class="name">var <span class="ident">data_checks</span> : Optional[<a title="datachecks.DataChecksForFeature" href="datachecks.html#datachecks.DataChecksForFeature">DataChecksForFeature</a>]</code></dt>
 <dd>
 <div class="desc"><p>Any data quality or data distribution checks that should be performed.
 Executed by Orchesrta using the user's supplied checking framwork.</p></div>
 </dd>
-<dt id="feature.Feature.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dt id="feature.Feature.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
 <dd>
 <div class="desc"><p>Human-readable notes</p></div>
 </dd>
@@ -1170,6 +981,16 @@ Used for aggregations and lookups.</p></div>
     Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
     &#34;&#34;&#34;
 
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: Optional[str]
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
     tags: Set[Tag]
     &#34;&#34;&#34;
     Human or machine defined tags for easy indexing and reference
@@ -1185,7 +1006,7 @@ Used for aggregations and lookups.</p></div>
     What DataType(s) does this transformation output?
     &#34;&#34;&#34;
 
-    records_needed = Literal[&#34;SingleRecord&#34;, &#34;AllRecords&#34;]
+    input_records_needed = Literal[&#34;SingleRecord&#34;, &#34;AllRecords&#34;]
     &#34;&#34;&#34;
     (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed).  Examples include image transformations (resize, etc) or embedding models, token lookups, etc.
 
@@ -1203,21 +1024,29 @@ Used for aggregations and lookups.</p></div>
 </ul>
 <h3>Class variables</h3>
 <dl>
+<dt id="feature.MLTransformation.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
+<dd>
+<div class="desc"><p>Human-readable notes</p></div>
+</dd>
 <dt id="feature.MLTransformation.input_datatype"><code class="name">var <span class="ident">input_datatype</span> : List[<a title="datatype.DataType" href="datatype.html#datatype.DataType">DataType</a>]</code></dt>
 <dd>
 <div class="desc"><p>What DataType(s) does this transformation accept?</p></div>
 </dd>
-<dt id="feature.MLTransformation.output_datatype"><code class="name">var <span class="ident">output_datatype</span> : List[<a title="datatype.DataType" href="datatype.html#datatype.DataType">DataType</a>]</code></dt>
-<dd>
-<div class="desc"><p>What DataType(s) does this transformation output?</p></div>
-</dd>
-<dt id="feature.MLTransformation.records_needed"><code class="name">var <span class="ident">records_needed</span></code></dt>
+<dt id="feature.MLTransformation.input_records_needed"><code class="name">var <span class="ident">input_records_needed</span></code></dt>
 <dd>
 <div class="desc"><p>(default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed).
 Examples include image transformations (resize, etc) or embedding models, token lookups, etc.</p>
 <p>AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)</p>
 <h1 id="todo-any-use-cases-for-joins-or-aggregation-aka-group-by-i-dont-think-so">TODO: Any use cases for joins or aggregation aka GROUP BY?
 I don't think so&hellip;</h1></div>
+</dd>
+<dt id="feature.MLTransformation.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+</dd>
+<dt id="feature.MLTransformation.output_datatype"><code class="name">var <span class="ident">output_datatype</span> : List[<a title="datatype.DataType" href="datatype.html#datatype.DataType">DataType</a>]</code></dt>
+<dd>
+<div class="desc"><p>What DataType(s) does this transformation output?</p></div>
 </dd>
 <dt id="feature.MLTransformation.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
 <dd>
@@ -1256,9 +1085,11 @@ I don't think so&hellip;</h1></div>
 <ul class="hlist">
 <li><code><b><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></b></code>:
 <ul class="hlist">
+<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
+<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.records_needed" href="#feature.MLTransformation.records_needed">records_needed</a></code></li>
 <li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
@@ -1455,9 +1286,11 @@ If it's wrong it is the upstream provider's fault ;-)</p></div>
 <ul class="hlist">
 <li><code><b><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></b></code>:
 <ul class="hlist">
+<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
+<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.records_needed" href="#feature.MLTransformation.records_needed">records_needed</a></code></li>
 <li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
@@ -1538,11 +1371,12 @@ Used for time-travel and time-aware joins.</p></div>
 <ul>
 <li>
 <h4><code><a title="feature.Aggregation" href="#feature.Aggregation">Aggregation</a></code></h4>
-<ul class="">
+<ul class="two-column">
 <li><code><a title="feature.Aggregation.aggregate_by" href="#feature.Aggregation.aggregate_by">aggregate_by</a></code></li>
 <li><code><a title="feature.Aggregation.aggregate_function" href="#feature.Aggregation.aggregate_function">aggregate_function</a></code></li>
 <li><code><a title="feature.Aggregation.custom_function" href="#feature.Aggregation.custom_function">custom_function</a></code></li>
 <li><code><a title="feature.Aggregation.order_by" href="#feature.Aggregation.order_by">order_by</a></code></li>
+<li><code><a title="feature.Aggregation.records_needed" href="#feature.Aggregation.records_needed">records_needed</a></code></li>
 <li><code><a title="feature.Aggregation.window" href="#feature.Aggregation.window">window</a></code></li>
 </ul>
 </li>
@@ -1550,36 +1384,9 @@ Used for time-travel and time-aware joins.</p></div>
 <h4><code><a title="feature.AutomaticTransformation" href="#feature.AutomaticTransformation">AutomaticTransformation</a></code></h4>
 </li>
 <li>
-<h4><code><a title="feature.Code" href="#feature.Code">Code</a></code></h4>
-<ul class="">
-<li><code><a title="feature.Code.tags" href="#feature.Code.tags">tags</a></code></li>
-</ul>
-</li>
-<li>
 <h4><code><a title="feature.CustomTransformation" href="#feature.CustomTransformation">CustomTransformation</a></code></h4>
 <ul class="">
 <li><code><a title="feature.CustomTransformation.data_code" href="#feature.CustomTransformation.data_code">data_code</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="feature.DataCheck" href="#feature.DataCheck">DataCheck</a></code></h4>
-<ul class="">
-<li><code><a title="feature.DataCheck.tags" href="#feature.DataCheck.tags">tags</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="feature.DataChecksForFeature" href="#feature.DataChecksForFeature">DataChecksForFeature</a></code></h4>
-<ul class="">
-<li><code><a title="feature.DataChecksForFeature.post_business_logic" href="#feature.DataChecksForFeature.post_business_logic">post_business_logic</a></code></li>
-<li><code><a title="feature.DataChecksForFeature.post_ml_transformation" href="#feature.DataChecksForFeature.post_ml_transformation">post_ml_transformation</a></code></li>
-<li><code><a title="feature.DataChecksForFeature.raw_input_features" href="#feature.DataChecksForFeature.raw_input_features">raw_input_features</a></code></li>
-<li><code><a title="feature.DataChecksForFeature.raw_input_lookups" href="#feature.DataChecksForFeature.raw_input_lookups">raw_input_lookups</a></code></li>
-</ul>
-</li>
-<li>
-<h4><code><a title="feature.DataCode" href="#feature.DataCode">DataCode</a></code></h4>
-<ul class="">
-<li><code><a title="feature.DataCode.records_needed" href="#feature.DataCode.records_needed">records_needed</a></code></li>
 </ul>
 </li>
 <li>
@@ -1616,9 +1423,11 @@ Used for time-travel and time-aware joins.</p></div>
 <li>
 <h4><code><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></code></h4>
 <ul class="">
+<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
+<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.records_needed" href="#feature.MLTransformation.records_needed">records_needed</a></code></li>
 <li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>

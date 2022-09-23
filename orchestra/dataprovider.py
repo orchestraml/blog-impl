@@ -1,6 +1,7 @@
-from typing import List, Set
+from typing import List, Set, Optional
 
-from feature import Key, Timestamp, Feature, DataCheck
+from feature import Key, Timestamp, Feature
+from datachecks import DataCheck
 from environment import EnvironmentType
 from common import Tag
 
@@ -35,7 +36,7 @@ class InputDataSchema:
     Machine-readable but human-understandable name
     """
 
-    description: str
+    description: Optional[str]
     """
     Human-readable notes
     """
@@ -112,7 +113,7 @@ class InputDataSource:
     Machine-readable but human-understandable name
     """
 
-    description: str
+    description: Optional[str]
     """
     Human-readable notes
     """
