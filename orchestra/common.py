@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Tuple, Optional, Set
 
 
 class Tag(Tuple):
@@ -8,3 +8,24 @@ class Tag(Tuple):
 
     key: str
     value: str
+
+
+class Metadata(Tuple):
+    """
+    Metadata about the given object
+    """
+
+    name: str
+    """
+    Machine-readable but human-understandable name
+    """
+
+    description: Optional[str]
+    """
+    Human-readable notes
+    """
+
+    tags: Set[Tag]
+    """
+    Human or machine defined tags for easy indexing and reference
+    """

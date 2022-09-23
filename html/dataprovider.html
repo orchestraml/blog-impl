@@ -31,7 +31,7 @@
 from feature import Key, Timestamp, Feature
 from datachecks import DataCheck
 from environment import EnvironmentType
-from common import Tag
+from common import Tag, Metadata
 
 
 class DataProviderType:
@@ -59,19 +59,9 @@ class InputDataSchema:
     The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
     &#34;&#34;&#34;
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     keys: List[Key]
@@ -136,19 +126,9 @@ class InputDataSource:
     The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
     &#34;&#34;&#34;
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     provider: DataProviderType
@@ -264,19 +244,9 @@ BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
     The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
     &#34;&#34;&#34;
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     keys: List[Key]
@@ -318,10 +288,6 @@ BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
 <div class="desc"><p>Any data quality or data distribution checks that should be performed on the incoming data.
 Executed by Orchesrta using the user's supplied checking framwork.</p></div>
 </dd>
-<dt id="dataprovider.InputDataSchema.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
-<dd>
-<div class="desc"><p>Human-readable notes</p></div>
-</dd>
 <dt id="dataprovider.InputDataSchema.keys"><code class="name">var <span class="ident">keys</span> : List[<a title="feature.Key" href="feature.html#feature.Key">Key</a>]</code></dt>
 <dd>
 <div class="desc"><p>The unique keys that describe the entity contained within this table.
@@ -332,9 +298,9 @@ Often referred to as:
 * Entity
 * &hellip; others &hellip;</p></div>
 </dd>
-<dt id="dataprovider.InputDataSchema.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dt id="dataprovider.InputDataSchema.metadata"><code class="name">var <span class="ident">metadata</span> : <a title="common.Metadata" href="common.html#common.Metadata">Metadata</a></code></dt>
 <dd>
-<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+<div class="desc"><p>name, description, key:value tags</p></div>
 </dd>
 <dt id="dataprovider.InputDataSchema.output_features"><code class="name">var <span class="ident">output_features</span> : List[<a title="feature.Feature" href="feature.html#feature.Feature">Feature</a>]</code></dt>
 <dd>
@@ -342,10 +308,6 @@ Often referred to as:
 <p>In database terms, the schema.</p>
 <p><code>keys</code> and <code>timestamp</code> can be treated by the user as if they were defined as output_features.
 Orchestra automatically appends these Features to the list.</p></div>
-</dd>
-<dt id="dataprovider.InputDataSchema.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
-<dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
 </dd>
 <dt id="dataprovider.InputDataSchema.timestamp"><code class="name">var <span class="ident">timestamp</span> : <a title="feature.Timestamp" href="feature.html#feature.Timestamp">Timestamp</a></code></dt>
 <dd>
@@ -386,19 +348,9 @@ Used to support time-travel-aware joins.</p></div>
     The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
     &#34;&#34;&#34;
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     provider: DataProviderType
@@ -425,10 +377,6 @@ Used to support time-travel-aware joins.</p></div>
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="dataprovider.InputDataSource.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
-<dd>
-<div class="desc"><p>Human-readable notes</p></div>
-</dd>
 <dt id="dataprovider.InputDataSource.environment"><code class="name">var <span class="ident">environment</span> : Set[<a title="environment.EnvironmentType" href="environment.html#environment.EnvironmentType">EnvironmentType</a>]</code></dt>
 <dd>
 <div class="desc"><p>In which environments is this data available for use?
@@ -436,9 +384,9 @@ Use cases:
 [1] Have seperate DatasetProviders in development vs. production (e.g,. use a local CSV export of sensitive data that's only available with machine-level credentials, etc)
 [2] Have multiple production DatasetProviders e.g., Kafka + Snowflake where one provider is used for second- latency features and the other used for week+ latency features.</p></div>
 </dd>
-<dt id="dataprovider.InputDataSource.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dt id="dataprovider.InputDataSource.metadata"><code class="name">var <span class="ident">metadata</span> : <a title="common.Metadata" href="common.html#common.Metadata">Metadata</a></code></dt>
 <dd>
-<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+<div class="desc"><p>name, description, key:value tags</p></div>
 </dd>
 <dt id="dataprovider.InputDataSource.provider"><code class="name">var <span class="ident">provider</span> : <a title="dataprovider.DataProviderType" href="#dataprovider.DataProviderType">DataProviderType</a></code></dt>
 <dd>
@@ -452,10 +400,6 @@ For example:
 [1] S3 path + credentials
 [2] BigQuery database URI + credentials
 [3] DBT model directory + run command</p></div>
-</dd>
-<dt id="dataprovider.InputDataSource.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
-<dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
 </dd>
 </dl>
 </dd>
@@ -493,25 +437,21 @@ For example:
 </li>
 <li>
 <h4><code><a title="dataprovider.InputDataSchema" href="#dataprovider.InputDataSchema">InputDataSchema</a></code></h4>
-<ul class="two-column">
+<ul class="">
 <li><code><a title="dataprovider.InputDataSchema.data_checks" href="#dataprovider.InputDataSchema.data_checks">data_checks</a></code></li>
-<li><code><a title="dataprovider.InputDataSchema.description" href="#dataprovider.InputDataSchema.description">description</a></code></li>
 <li><code><a title="dataprovider.InputDataSchema.keys" href="#dataprovider.InputDataSchema.keys">keys</a></code></li>
-<li><code><a title="dataprovider.InputDataSchema.name" href="#dataprovider.InputDataSchema.name">name</a></code></li>
+<li><code><a title="dataprovider.InputDataSchema.metadata" href="#dataprovider.InputDataSchema.metadata">metadata</a></code></li>
 <li><code><a title="dataprovider.InputDataSchema.output_features" href="#dataprovider.InputDataSchema.output_features">output_features</a></code></li>
-<li><code><a title="dataprovider.InputDataSchema.tags" href="#dataprovider.InputDataSchema.tags">tags</a></code></li>
 <li><code><a title="dataprovider.InputDataSchema.timestamp" href="#dataprovider.InputDataSchema.timestamp">timestamp</a></code></li>
 </ul>
 </li>
 <li>
 <h4><code><a title="dataprovider.InputDataSource" href="#dataprovider.InputDataSource">InputDataSource</a></code></h4>
-<ul class="two-column">
-<li><code><a title="dataprovider.InputDataSource.description" href="#dataprovider.InputDataSource.description">description</a></code></li>
+<ul class="">
 <li><code><a title="dataprovider.InputDataSource.environment" href="#dataprovider.InputDataSource.environment">environment</a></code></li>
-<li><code><a title="dataprovider.InputDataSource.name" href="#dataprovider.InputDataSource.name">name</a></code></li>
+<li><code><a title="dataprovider.InputDataSource.metadata" href="#dataprovider.InputDataSource.metadata">metadata</a></code></li>
 <li><code><a title="dataprovider.InputDataSource.provider" href="#dataprovider.InputDataSource.provider">provider</a></code></li>
 <li><code><a title="dataprovider.InputDataSource.provider_config" href="#dataprovider.InputDataSource.provider_config">provider_config</a></code></li>
-<li><code><a title="dataprovider.InputDataSource.tags" href="#dataprovider.InputDataSource.tags">tags</a></code></li>
 </ul>
 </li>
 <li>

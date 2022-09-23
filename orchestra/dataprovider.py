@@ -3,7 +3,7 @@ from typing import List, Set, Optional
 from feature import Key, Timestamp, Feature
 from datachecks import DataCheck
 from environment import EnvironmentType
-from common import Tag
+from common import Tag, Metadata
 
 
 class DataProviderType:
@@ -31,19 +31,9 @@ class InputDataSchema:
     The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
     """
 
-    name: str
+    metadata: Metadata
     """
-    Machine-readable but human-understandable name
-    """
-
-    description: Optional[str]
-    """
-    Human-readable notes
-    """
-
-    tags: Set[Tag]
-    """
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     """
 
     keys: List[Key]
@@ -108,19 +98,9 @@ class InputDataSource:
     The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
     """
 
-    name: str
+    metadata: Metadata
     """
-    Machine-readable but human-understandable name
-    """
-
-    description: Optional[str]
-    """
-    Human-readable notes
-    """
-
-    tags: Set[Tag]
-    """
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     """
 
     provider: DataProviderType

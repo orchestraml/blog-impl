@@ -27,7 +27,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from typing import Literal, Set, Optional
-from common import Tag
+from common import Tag, Metadata
 
 
 class Code:
@@ -36,19 +36,9 @@ class Code:
     Throws an error if used directly.
     &#34;&#34;&#34;
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
 
@@ -96,19 +86,9 @@ Throws an error if used directly.</p></div>
     Throws an error if used directly.
     &#34;&#34;&#34;
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;</code></pre>
 </details>
 <h3>Subclasses</h3>
@@ -117,17 +97,9 @@ Throws an error if used directly.</p></div>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="datacode.Code.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
+<dt id="datacode.Code.metadata"><code class="name">var <span class="ident">metadata</span> : <a title="common.Metadata" href="common.html#common.Metadata">Metadata</a></code></dt>
 <dd>
-<div class="desc"><p>Human-readable notes</p></div>
-</dd>
-<dt id="datacode.Code.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
-<dd>
-<div class="desc"><p>Machine-readable but human-understandable name</p></div>
-</dd>
-<dt id="datacode.Code.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
-<dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+<div class="desc"><p>name, description, key:value tags</p></div>
 </dd>
 </dl>
 </dd>
@@ -180,9 +152,7 @@ Throws an error if used directly.</p></div>
 <ul class="hlist">
 <li><code><b><a title="datacode.Code" href="#datacode.Code">Code</a></b></code>:
 <ul class="hlist">
-<li><code><a title="datacode.Code.description" href="#datacode.Code.description">description</a></code></li>
-<li><code><a title="datacode.Code.name" href="#datacode.Code.name">name</a></code></li>
-<li><code><a title="datacode.Code.tags" href="#datacode.Code.tags">tags</a></code></li>
+<li><code><a title="datacode.Code.metadata" href="#datacode.Code.metadata">metadata</a></code></li>
 </ul>
 </li>
 </ul>
@@ -201,9 +171,7 @@ Throws an error if used directly.</p></div>
 <li>
 <h4><code><a title="datacode.Code" href="#datacode.Code">Code</a></code></h4>
 <ul class="">
-<li><code><a title="datacode.Code.description" href="#datacode.Code.description">description</a></code></li>
-<li><code><a title="datacode.Code.name" href="#datacode.Code.name">name</a></code></li>
-<li><code><a title="datacode.Code.tags" href="#datacode.Code.tags">tags</a></code></li>
+<li><code><a title="datacode.Code.metadata" href="#datacode.Code.metadata">metadata</a></code></li>
 </ul>
 </li>
 <li>

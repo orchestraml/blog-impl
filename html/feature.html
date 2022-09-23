@@ -37,7 +37,7 @@ from typing import List, Optional, Literal, Tuple, Set
 from datatype import DataType
 from datetime import timedelta
 from model import Model
-from common import Tag
+from common import Tag, Metadata
 from datacode import DataCode
 from datachecks import DataChecksForFeature
 
@@ -47,19 +47,9 @@ class MLTransformation:
     Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
     &#34;&#34;&#34;
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     input_datatype: List[DataType]
@@ -149,19 +139,9 @@ class Feature:
         super().__init__()
         return
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     input_features: List[Feature]
@@ -516,9 +496,7 @@ Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
 </li>
 <li><code><b><a title="datacode.Code" href="datacode.html#datacode.Code">Code</a></b></code>:
 <ul class="hlist">
-<li><code><a title="datacode.Code.description" href="datacode.html#datacode.Code.description">description</a></code></li>
-<li><code><a title="datacode.Code.name" href="datacode.html#datacode.Code.name">name</a></code></li>
-<li><code><a title="datacode.Code.tags" href="datacode.html#datacode.Code.tags">tags</a></code></li>
+<li><code><a title="datacode.Code.metadata" href="datacode.html#datacode.Code.metadata">metadata</a></code></li>
 </ul>
 </li>
 </ul>
@@ -550,12 +528,10 @@ Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
 <ul class="hlist">
 <li><code><b><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></b></code>:
 <ul class="hlist">
-<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
-<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
+<li><code><a title="feature.MLTransformation.metadata" href="#feature.MLTransformation.metadata">metadata</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -596,12 +572,10 @@ Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
 <ul class="hlist">
 <li><code><b><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></b></code>:
 <ul class="hlist">
-<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
-<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
+<li><code><a title="feature.MLTransformation.metadata" href="#feature.MLTransformation.metadata">metadata</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -631,15 +605,13 @@ This is the most commonly used class within Orchestra.</p></div>
 <ul class="hlist">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -670,15 +642,13 @@ For example, removing known bad labels, etc.</p></div>
 <ul class="hlist">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -717,19 +687,9 @@ class Feature:
         super().__init__()
         return
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     input_features: List[Feature]
@@ -827,10 +787,6 @@ Irregardless of what you call it, folks apply business logic, then transform eve
 <div class="desc"><p>Any data quality or data distribution checks that should be performed.
 Executed by Orchesrta using the user's supplied checking framwork.</p></div>
 </dd>
-<dt id="feature.Feature.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
-<dd>
-<div class="desc"><p>Human-readable notes</p></div>
-</dd>
 <dt id="feature.Feature.freshness"><code class="name">var <span class="ident">freshness</span> : datetime.timedelta</code></dt>
 <dd>
 <div class="desc"><p>How frequently does this feature's value need to be updated to reflect the most recently available upstream/source data?</p>
@@ -850,6 +806,10 @@ Executed by Orchesrta using the user's supplied checking framwork.</p></div>
 <div class="desc"><p>Optional, used for join-like logic or where a value must be looked up from another table that doesn't share the primary key space. </p>
 <p>The <code><a title="feature.Key" href="#feature.Key">Key</a>(s)</code> of each <code>input_lookups[<a title="feature.Feature" href="#feature.Feature">Feature</a>]</code>'s <code>Dataset</code> must be included as <code>input_features</code></p></div>
 </dd>
+<dt id="feature.Feature.metadata"><code class="name">var <span class="ident">metadata</span> : <a title="common.Metadata" href="common.html#common.Metadata">Metadata</a></code></dt>
+<dd>
+<div class="desc"><p>name, description, key:value tags</p></div>
+</dd>
 <dt id="feature.Feature.ml_transformations"><code class="name">var <span class="ident">ml_transformations</span> : Optional[List[<a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a>]]</code></dt>
 <dd>
 <div class="desc"><p>Optional ML transformations (aka pre-processing aka functions that translate from human-readable data to model-readable data).</p>
@@ -865,14 +825,6 @@ Irregardless of what you call it, folks apply business logic, then transform eve
 <dd>
 <div class="desc"><p>Output only.
 Set automatically based on the <code>ml_transformations.output_datatype</code>'s</p></div>
-</dd>
-<dt id="feature.Feature.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
-<dd>
-<div class="desc"><p>Machine-readable but human-understandable name</p></div>
-</dd>
-<dt id="feature.Feature.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
-<dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
 </dd>
 </dl>
 </dd>
@@ -912,15 +864,13 @@ Used for aggregations and lookups.</p></div>
 <ul class="hlist">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -954,15 +904,13 @@ Used for aggregations and lookups.</p></div>
 <ul class="hlist">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -981,19 +929,9 @@ Used for aggregations and lookups.</p></div>
     Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
     &#34;&#34;&#34;
 
-    name: str
+    metadata: Metadata
     &#34;&#34;&#34;
-    Machine-readable but human-understandable name
-    &#34;&#34;&#34;
-
-    description: Optional[str]
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     input_datatype: List[DataType]
@@ -1024,10 +962,6 @@ Used for aggregations and lookups.</p></div>
 </ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="feature.MLTransformation.description"><code class="name">var <span class="ident">description</span> : Optional[str]</code></dt>
-<dd>
-<div class="desc"><p>Human-readable notes</p></div>
-</dd>
 <dt id="feature.MLTransformation.input_datatype"><code class="name">var <span class="ident">input_datatype</span> : List[<a title="datatype.DataType" href="datatype.html#datatype.DataType">DataType</a>]</code></dt>
 <dd>
 <div class="desc"><p>What DataType(s) does this transformation accept?</p></div>
@@ -1040,17 +974,13 @@ Examples include image transformations (resize, etc) or embedding models, token 
 <h1 id="todo-any-use-cases-for-joins-or-aggregation-aka-group-by-i-dont-think-so">TODO: Any use cases for joins or aggregation aka GROUP BY?
 I don't think so&hellip;</h1></div>
 </dd>
-<dt id="feature.MLTransformation.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dt id="feature.MLTransformation.metadata"><code class="name">var <span class="ident">metadata</span> : <a title="common.Metadata" href="common.html#common.Metadata">Metadata</a></code></dt>
 <dd>
-<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+<div class="desc"><p>name, description, key:value tags</p></div>
 </dd>
 <dt id="feature.MLTransformation.output_datatype"><code class="name">var <span class="ident">output_datatype</span> : List[<a title="datatype.DataType" href="datatype.html#datatype.DataType">DataType</a>]</code></dt>
 <dd>
 <div class="desc"><p>What DataType(s) does this transformation output?</p></div>
-</dd>
-<dt id="feature.MLTransformation.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
-<dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
 </dd>
 </dl>
 </dd>
@@ -1085,12 +1015,10 @@ I don't think so&hellip;</h1></div>
 <ul class="hlist">
 <li><code><b><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></b></code>:
 <ul class="hlist">
-<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
-<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
+<li><code><a title="feature.MLTransformation.metadata" href="#feature.MLTransformation.metadata">metadata</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1150,15 +1078,13 @@ References a specific version. The Model object includes all metadata &amp; line
 <ul class="hlist">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1205,15 +1131,13 @@ If a value here is “bad” - it is 100% the fault of the DataProvider's owner 
 <ul class="hlist">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1244,15 +1168,13 @@ If it's wrong it is the upstream provider's fault ;-)</p></div>
 <ul class="hlist">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1286,12 +1208,10 @@ If it's wrong it is the upstream provider's fault ;-)</p></div>
 <ul class="hlist">
 <li><code><b><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></b></code>:
 <ul class="hlist">
-<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
-<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
+<li><code><a title="feature.MLTransformation.metadata" href="#feature.MLTransformation.metadata">metadata</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1345,15 +1265,13 @@ Used for time-travel and time-aware joins.</p></div>
 <ul class="hlist">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 </ul>
@@ -1400,15 +1318,13 @@ Used for time-travel and time-aware joins.</p></div>
 <ul class="two-column">
 <li><code><a title="feature.Feature.business_logics" href="#feature.Feature.business_logics">business_logics</a></code></li>
 <li><code><a title="feature.Feature.data_checks" href="#feature.Feature.data_checks">data_checks</a></code></li>
-<li><code><a title="feature.Feature.description" href="#feature.Feature.description">description</a></code></li>
 <li><code><a title="feature.Feature.freshness" href="#feature.Feature.freshness">freshness</a></code></li>
 <li><code><a title="feature.Feature.human_datatype" href="#feature.Feature.human_datatype">human_datatype</a></code></li>
 <li><code><a title="feature.Feature.input_features" href="#feature.Feature.input_features">input_features</a></code></li>
 <li><code><a title="feature.Feature.input_lookups" href="#feature.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="feature.Feature.metadata" href="#feature.Feature.metadata">metadata</a></code></li>
 <li><code><a title="feature.Feature.ml_transformations" href="#feature.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="feature.Feature.model_datatypes" href="#feature.Feature.model_datatypes">model_datatypes</a></code></li>
-<li><code><a title="feature.Feature.name" href="#feature.Feature.name">name</a></code></li>
-<li><code><a title="feature.Feature.tags" href="#feature.Feature.tags">tags</a></code></li>
 </ul>
 </li>
 <li>
@@ -1423,12 +1339,10 @@ Used for time-travel and time-aware joins.</p></div>
 <li>
 <h4><code><a title="feature.MLTransformation" href="#feature.MLTransformation">MLTransformation</a></code></h4>
 <ul class="">
-<li><code><a title="feature.MLTransformation.description" href="#feature.MLTransformation.description">description</a></code></li>
 <li><code><a title="feature.MLTransformation.input_datatype" href="#feature.MLTransformation.input_datatype">input_datatype</a></code></li>
 <li><code><a title="feature.MLTransformation.input_records_needed" href="#feature.MLTransformation.input_records_needed">input_records_needed</a></code></li>
-<li><code><a title="feature.MLTransformation.name" href="#feature.MLTransformation.name">name</a></code></li>
+<li><code><a title="feature.MLTransformation.metadata" href="#feature.MLTransformation.metadata">metadata</a></code></li>
 <li><code><a title="feature.MLTransformation.output_datatype" href="#feature.MLTransformation.output_datatype">output_datatype</a></code></li>
-<li><code><a title="feature.MLTransformation.tags" href="#feature.MLTransformation.tags">tags</a></code></li>
 </ul>
 </li>
 <li>

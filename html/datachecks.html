@@ -27,7 +27,7 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from typing import Optional, Set
-from common import Tag
+from common import Tag, Metadata
 
 
 class DataCheck:
@@ -36,9 +36,9 @@ class DataCheck:
     Placeholder for Deequ, PyTest, great_expectation based checks
     &#34;&#34;&#34;
 
-    tags: Set[Tag]
+    metadata: Metadata
     &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     # TODO: Flesh out data checks.
@@ -78,9 +78,9 @@ class DataChecksForFeature:
     Placeholder for Deequ, PyTest, great_expectation based checks
     &#34;&#34;&#34;
 
-    tags: Set[Tag]
+    metadata: Metadata
     &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     &#34;&#34;&#34;
 
     # TODO: Flesh out data checks.
@@ -90,9 +90,9 @@ class DataChecksForFeature:
 </details>
 <h3>Class variables</h3>
 <dl>
-<dt id="datachecks.DataCheck.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
+<dt id="datachecks.DataCheck.metadata"><code class="name">var <span class="ident">metadata</span> : <a title="common.Metadata" href="common.html#common.Metadata">Metadata</a></code></dt>
 <dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+<div class="desc"><p>name, description, key:value tags</p></div>
 </dd>
 </dl>
 </dd>
@@ -145,7 +145,7 @@ class DataChecksForFeature:
 <li>
 <h4><code><a title="datachecks.DataCheck" href="#datachecks.DataCheck">DataCheck</a></code></h4>
 <ul class="">
-<li><code><a title="datachecks.DataCheck.tags" href="#datachecks.DataCheck.tags">tags</a></code></li>
+<li><code><a title="datachecks.DataCheck.metadata" href="#datachecks.DataCheck.metadata">metadata</a></code></li>
 </ul>
 </li>
 <li>

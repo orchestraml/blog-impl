@@ -9,7 +9,7 @@ from typing import List, Optional, Literal, Tuple, Set
 from datatype import DataType
 from datetime import timedelta
 from model import Model
-from common import Tag
+from common import Tag, Metadata
 from datacode import DataCode
 from datachecks import DataChecksForFeature
 
@@ -19,19 +19,9 @@ class MLTransformation:
     Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
     """
 
-    name: str
+    metadata: Metadata
     """
-    Machine-readable but human-understandable name
-    """
-
-    description: Optional[str]
-    """
-    Human-readable notes
-    """
-
-    tags: Set[Tag]
-    """
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     """
 
     input_datatype: List[DataType]
@@ -121,19 +111,9 @@ class Feature:
         super().__init__()
         return
 
-    name: str
+    metadata: Metadata
     """
-    Machine-readable but human-understandable name
-    """
-
-    description: Optional[str]
-    """
-    Human-readable notes
-    """
-
-    tags: Set[Tag]
-    """
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     """
 
     input_features: List[Feature]

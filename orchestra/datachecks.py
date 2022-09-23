@@ -1,5 +1,5 @@
 from typing import Optional, Set
-from common import Tag
+from common import Tag, Metadata
 
 
 class DataCheck:
@@ -8,9 +8,9 @@ class DataCheck:
     Placeholder for Deequ, PyTest, great_expectation based checks
     """
 
-    tags: Set[Tag]
+    metadata: Metadata
     """
-    Human or machine defined tags for easy indexing and reference
+    name, description, key:value tags
     """
 
     # TODO: Flesh out data checks.
