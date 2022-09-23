@@ -71,11 +71,17 @@ feature = Feature(
     # More on DataCode() later
     business_logic=[DataCode(), Aggregation()],
     # 1+ MLTransformations, each that defines its output model_datatype(s). 3 options:
-    # 1. MLTransformations.Auto: Orchestra applies its pre-defined logic, developed using hueristics on the data itself
     # 2. MLTransformations.SciKitLearn.OneHotEncoder: Orchestra's managed implementation of commonly used libraries #TODO: which libraries should we support?
     # 3. MLTransformations.Custom: Custom function that can operate at a row or dataset level
     # 4. MLTransformations.Model: Apply another ML model to the feature's value, for example, applying an embedding model such as BERT to encode a string
-    ml_transformations=[MLTransformations.Auto],
+    ml_transformations=[
+        MLTransformations.Auto,
+        # 1. MLTransformations.Auto: Orchestra applies its pre-defined logic, developed using hueristics on the data itself
+        MLTransformations.SciKitLearn.OneHotEncoder,
+        MLTransformations.ModelPrediction,
+        MLTransformations.Raw(Float),
+        MLTransformations.Custom,
+    ],
     # How frequently does a feature’s value need to be updated to reflect the most recently available upstream/source data?
     # Technically, if [now() - time_of_last_computation] >= `freshness`, recompute the value if any of input_features have changed within the time window [now() --> time_of_last_computation]
     freshness=timedelta(seconds=1),
