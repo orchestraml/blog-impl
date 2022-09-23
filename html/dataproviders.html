@@ -26,12 +26,157 @@
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class DataProviderType:
+<pre><code class="python">from typing import List, Set
+
+from features import Key, Timestamp, Feature, DataCheck
+from environments import EnvironmentType
+from common import Tag
+
+
+class DataProviderType:
     &#34;&#34;&#34;
     What is the actual data infra?  BigQuery, Snowflake, S3, Google Sheests, Kafka, etc
     &#34;&#34;&#34;
 
-    # TODO: implement this</code></pre>
+    # TODO: implement this
+
+
+class InputDataSchema:
+    &#34;&#34;&#34;
+    `InputDataSchema` defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.
+
+    `InputDataProviders` defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by `InputDataSchema`.
+
+    Together, `InputDataSchema` and `InputDataProviders` are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).
+
+    Why separate `InputDataSchema` from the `InputDataProviders`?
+
+    Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).
+
+    Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.
+
+    The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
+    &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    keys: List[Key]
+    &#34;&#34;&#34;
+    The unique keys that describe the entity contained within this table.  For example, [user_id, transaction_id}.
+    Often referred to as:
+    * Primary key
+    * Data grain
+    * Entity
+    * ... others ...
+    &#34;&#34;&#34;
+
+    # TODO: Other feature stores split out entity to a top level object.  Why is this?  I keep thinking it feels redundant but maybe there is an advantage to having shared entities when it comes to collaboration particularly when teams are sharing features about many common entities such as users?
+
+    timestamp: Timestamp
+    &#34;&#34;&#34;
+    Which column of data has the timestamp of the record?
+    Used to support time-travel-aware joins.
+    &#34;&#34;&#34;
+
+    output_features: List[Feature]
+    &#34;&#34;&#34;
+    The `Features` delivered by a InputDataProvider confirming to this `InputDataSchema`.
+    
+    In database terms, the schema.
+
+    `keys` and `timestamp` can be treated by the user as if they were defined as output_features.  Orchestra automatically appends these Features to the list.
+    &#34;&#34;&#34;
+
+    data_checks: List[DataCheck]
+    &#34;&#34;&#34;
+    Any data quality or data distribution checks that should be performed on the incoming data.  Executed by Orchesrta using the user&#39;s supplied checking framwork.
+    &#34;&#34;&#34;
+
+
+class DataProviderConfig:
+    &#34;&#34;&#34;
+    Configuration settings for a specific provider
+    For example
+    # [1] S3 path + credentials
+    # [2] BigQuery database URI + credentials
+    # [3] DBT model directory + run command
+    &#34;&#34;&#34;
+
+    # TODO: implement this to be key:value pairs
+
+
+class InputDataSource:
+    &#34;&#34;&#34;
+    `InputDataSchema` defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.
+
+    `InputDataProviders` defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by `InputDataSchema`.
+
+    Together, `InputDataSchema` and `InputDataProviders` are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).
+
+    Why separate `InputDataSchema` from the `InputDataProviders`?
+
+    Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).
+
+    Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.
+
+    The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
+    &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    provider: DataProviderType
+    &#34;&#34;&#34;
+    What is the actual infra?  BigQuery, Snowflake, S3, Google Sheests, Kafka, etc
+    &#34;&#34;&#34;
+
+    provider_config: DataProviderConfig
+    &#34;&#34;&#34;
+    Configuration settings for a specific provider
+    For example:
+    [1] S3 path + credentials
+    [2] BigQuery database URI + credentials
+    [3] DBT model directory + run command&#34;&#34;&#34;
+
+    environment: Set[EnvironmentType]
+    &#34;&#34;&#34;
+    In which environments is this data available for use?  Use cases:
+    [1] Have seperate DatasetProviders in development vs. production (e.g,. use a local CSV export of sensitive data that&#39;s only available with machine-level credentials, etc)
+    [2] Have multiple production DatasetProviders e.g., Kafka + Snowflake where one provider is used for second- latency features and the other used for week+ latency features.
+    &#34;&#34;&#34;
+
+    # TODO: Do we need a way to run DataCode() on a InputDataProvider?  or, should this be handled by each provider&#39;s config?  An example use case might be changing column names, dropping rows that are &gt;x% null, filtering out known bad rows, etc.  I lean to yes...
+
+
+class OutputDataDestination:
+    &#34;&#34;&#34; &#34;&#34;&#34;
+
+    # TODO: Add in the concept of a data sink.  How will we save things like prediction logs, cached training data, etc.</code></pre>
 </details>
 </section>
 <section>
@@ -43,6 +188,31 @@
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
+<dt id="dataproviders.DataProviderConfig"><code class="flex name class">
+<span>class <span class="ident">DataProviderConfig</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Configuration settings for a specific provider
+For example</p>
+<h1 id="1-s3-path-credentials">[1] S3 path + credentials</h1>
+<h1 id="2-bigquery-database-uri-credentials">[2] BigQuery database URI + credentials</h1>
+<h1 id="3-dbt-model-directory-run-command">[3] DBT model directory + run command</h1></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataProviderConfig:
+    &#34;&#34;&#34;
+    Configuration settings for a specific provider
+    For example
+    # [1] S3 path + credentials
+    # [2] BigQuery database URI + credentials
+    # [3] DBT model directory + run command
+    &#34;&#34;&#34;
+
+    # TODO: implement this to be key:value pairs</code></pre>
+</details>
+</dd>
 <dt id="dataproviders.DataProviderType"><code class="flex name class">
 <span>class <span class="ident">DataProviderType</span></span>
 </code></dt>
@@ -61,6 +231,248 @@ BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
     # TODO: implement this</code></pre>
 </details>
 </dd>
+<dt id="dataproviders.InputDataSchema"><code class="flex name class">
+<span>class <span class="ident">InputDataSchema</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p><code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code> defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.</p>
+<p><code>InputDataProviders</code> defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code>.</p>
+<p>Together, <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code> and <code>InputDataProviders</code> are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).</p>
+<p>Why separate <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code> from the <code>InputDataProviders</code>?</p>
+<p>Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).</p>
+<p>Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.</p>
+<p>The <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code> abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputDataSchema:
+    &#34;&#34;&#34;
+    `InputDataSchema` defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.
+
+    `InputDataProviders` defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by `InputDataSchema`.
+
+    Together, `InputDataSchema` and `InputDataProviders` are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).
+
+    Why separate `InputDataSchema` from the `InputDataProviders`?
+
+    Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).
+
+    Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.
+
+    The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
+    &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    keys: List[Key]
+    &#34;&#34;&#34;
+    The unique keys that describe the entity contained within this table.  For example, [user_id, transaction_id}.
+    Often referred to as:
+    * Primary key
+    * Data grain
+    * Entity
+    * ... others ...
+    &#34;&#34;&#34;
+
+    # TODO: Other feature stores split out entity to a top level object.  Why is this?  I keep thinking it feels redundant but maybe there is an advantage to having shared entities when it comes to collaboration particularly when teams are sharing features about many common entities such as users?
+
+    timestamp: Timestamp
+    &#34;&#34;&#34;
+    Which column of data has the timestamp of the record?
+    Used to support time-travel-aware joins.
+    &#34;&#34;&#34;
+
+    output_features: List[Feature]
+    &#34;&#34;&#34;
+    The `Features` delivered by a InputDataProvider confirming to this `InputDataSchema`.
+    
+    In database terms, the schema.
+
+    `keys` and `timestamp` can be treated by the user as if they were defined as output_features.  Orchestra automatically appends these Features to the list.
+    &#34;&#34;&#34;
+
+    data_checks: List[DataCheck]
+    &#34;&#34;&#34;
+    Any data quality or data distribution checks that should be performed on the incoming data.  Executed by Orchesrta using the user&#39;s supplied checking framwork.
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="dataproviders.InputDataSchema.data_checks"><code class="name">var <span class="ident">data_checks</span> : List[<a title="features.DataCheck" href="features.html#features.DataCheck">DataCheck</a>]</code></dt>
+<dd>
+<div class="desc"><p>Any data quality or data distribution checks that should be performed on the incoming data.
+Executed by Orchesrta using the user's supplied checking framwork.</p></div>
+</dd>
+<dt id="dataproviders.InputDataSchema.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Human-readable notes</p></div>
+</dd>
+<dt id="dataproviders.InputDataSchema.keys"><code class="name">var <span class="ident">keys</span> : List[<a title="features.Key" href="features.html#features.Key">Key</a>]</code></dt>
+<dd>
+<div class="desc"><p>The unique keys that describe the entity contained within this table.
+For example, [user_id, transaction_id}.
+Often referred to as:
+* Primary key
+* Data grain
+* Entity
+* &hellip; others &hellip;</p></div>
+</dd>
+<dt id="dataproviders.InputDataSchema.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+</dd>
+<dt id="dataproviders.InputDataSchema.output_features"><code class="name">var <span class="ident">output_features</span> : List[<a title="features.Feature" href="features.html#features.Feature">Feature</a>]</code></dt>
+<dd>
+<div class="desc"><p>The <code>Features</code> delivered by a InputDataProvider confirming to this <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code>.</p>
+<p>In database terms, the schema.</p>
+<p><code>keys</code> and <code>timestamp</code> can be treated by the user as if they were defined as output_features.
+Orchestra automatically appends these Features to the list.</p></div>
+</dd>
+<dt id="dataproviders.InputDataSchema.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
+<dt id="dataproviders.InputDataSchema.timestamp"><code class="name">var <span class="ident">timestamp</span> : <a title="features.Timestamp" href="features.html#features.Timestamp">Timestamp</a></code></dt>
+<dd>
+<div class="desc"><p>Which column of data has the timestamp of the record?
+Used to support time-travel-aware joins.</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="dataproviders.InputDataSource"><code class="flex name class">
+<span>class <span class="ident">InputDataSource</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p><code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code> defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.</p>
+<p><code>InputDataProviders</code> defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code>.</p>
+<p>Together, <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code> and <code>InputDataProviders</code> are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).</p>
+<p>Why separate <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code> from the <code>InputDataProviders</code>?</p>
+<p>Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).</p>
+<p>Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.</p>
+<p>The <code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code> abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputDataSource:
+    &#34;&#34;&#34;
+    `InputDataSchema` defines the schema of data (aka RawFeatures) ingested by data scientists to further manipulate into DerivedFeatures that a Model can process.
+
+    `InputDataProviders` defines an actual data source (e.g., database, s3/blob store bucket, kafka streem, google sheet, etc) that provides data in the schema defined by `InputDataSchema`.
+
+    Together, `InputDataSchema` and `InputDataProviders` are designed to provide a clean abstraction between the upstream data sources (that data scientists have little to no control over, but are extremely dependent upon) and the feature engineering work (that data scientists have complete control over).
+
+    Why separate `InputDataSchema` from the `InputDataProviders`?
+
+    Particularly when building user-facing models, it is common to have training data come from a one data provider (e.g., an analytical warehouse or data lake with historical data) and production data (that is fed to the model for a prediction) come from a combination of data providers (e.g., features requiring a week+ freshness are computed from analytical data sources and cached while features requiring a second- freshness are computed in near real time from a streaming data source).
+
+    Of course, for the model to actually work, these multiple data sources must deliver the same data schema, hence the abstraction that supports a specific definition.
+
+    The `InputDataSchema` abstraction enables Orchestra to intelligently orchestrate your data infrastructure, for example, applying schema over an unstructured Kafka stream or alerting when data quality checks fail on one source.
+    &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    provider: DataProviderType
+    &#34;&#34;&#34;
+    What is the actual infra?  BigQuery, Snowflake, S3, Google Sheests, Kafka, etc
+    &#34;&#34;&#34;
+
+    provider_config: DataProviderConfig
+    &#34;&#34;&#34;
+    Configuration settings for a specific provider
+    For example:
+    [1] S3 path + credentials
+    [2] BigQuery database URI + credentials
+    [3] DBT model directory + run command&#34;&#34;&#34;
+
+    environment: Set[EnvironmentType]
+    &#34;&#34;&#34;
+    In which environments is this data available for use?  Use cases:
+    [1] Have seperate DatasetProviders in development vs. production (e.g,. use a local CSV export of sensitive data that&#39;s only available with machine-level credentials, etc)
+    [2] Have multiple production DatasetProviders e.g., Kafka + Snowflake where one provider is used for second- latency features and the other used for week+ latency features.
+    &#34;&#34;&#34;
+
+    # TODO: Do we need a way to run DataCode() on a InputDataProvider?  or, should this be handled by each provider&#39;s config?  An example use case might be changing column names, dropping rows that are &gt;x% null, filtering out known bad rows, etc.  I lean to yes...</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="dataproviders.InputDataSource.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Human-readable notes</p></div>
+</dd>
+<dt id="dataproviders.InputDataSource.environment"><code class="name">var <span class="ident">environment</span> : Set[<a title="environments.EnvironmentType" href="environments.html#environments.EnvironmentType">EnvironmentType</a>]</code></dt>
+<dd>
+<div class="desc"><p>In which environments is this data available for use?
+Use cases:
+[1] Have seperate DatasetProviders in development vs. production (e.g,. use a local CSV export of sensitive data that's only available with machine-level credentials, etc)
+[2] Have multiple production DatasetProviders e.g., Kafka + Snowflake where one provider is used for second- latency features and the other used for week+ latency features.</p></div>
+</dd>
+<dt id="dataproviders.InputDataSource.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+</dd>
+<dt id="dataproviders.InputDataSource.provider"><code class="name">var <span class="ident">provider</span> : <a title="dataproviders.DataProviderType" href="#dataproviders.DataProviderType">DataProviderType</a></code></dt>
+<dd>
+<div class="desc"><p>What is the actual infra?
+BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
+</dd>
+<dt id="dataproviders.InputDataSource.provider_config"><code class="name">var <span class="ident">provider_config</span> : <a title="dataproviders.DataProviderConfig" href="#dataproviders.DataProviderConfig">DataProviderConfig</a></code></dt>
+<dd>
+<div class="desc"><p>Configuration settings for a specific provider
+For example:
+[1] S3 path + credentials
+[2] BigQuery database URI + credentials
+[3] DBT model directory + run command</p></div>
+</dd>
+<dt id="dataproviders.InputDataSource.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="dataproviders.OutputDataDestination"><code class="flex name class">
+<span>class <span class="ident">OutputDataDestination</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class OutputDataDestination:
+    &#34;&#34;&#34; &#34;&#34;&#34;
+
+    # TODO: Add in the concept of a data sink.  How will we save things like prediction logs, cached training data, etc.</code></pre>
+</details>
+</dd>
 </dl>
 </section>
 </article>
@@ -73,7 +485,36 @@ BigQuery, Snowflake, S3, Google Sheests, Kafka, etc</p></div>
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
+<h4><code><a title="dataproviders.DataProviderConfig" href="#dataproviders.DataProviderConfig">DataProviderConfig</a></code></h4>
+</li>
+<li>
 <h4><code><a title="dataproviders.DataProviderType" href="#dataproviders.DataProviderType">DataProviderType</a></code></h4>
+</li>
+<li>
+<h4><code><a title="dataproviders.InputDataSchema" href="#dataproviders.InputDataSchema">InputDataSchema</a></code></h4>
+<ul class="two-column">
+<li><code><a title="dataproviders.InputDataSchema.data_checks" href="#dataproviders.InputDataSchema.data_checks">data_checks</a></code></li>
+<li><code><a title="dataproviders.InputDataSchema.description" href="#dataproviders.InputDataSchema.description">description</a></code></li>
+<li><code><a title="dataproviders.InputDataSchema.keys" href="#dataproviders.InputDataSchema.keys">keys</a></code></li>
+<li><code><a title="dataproviders.InputDataSchema.name" href="#dataproviders.InputDataSchema.name">name</a></code></li>
+<li><code><a title="dataproviders.InputDataSchema.output_features" href="#dataproviders.InputDataSchema.output_features">output_features</a></code></li>
+<li><code><a title="dataproviders.InputDataSchema.tags" href="#dataproviders.InputDataSchema.tags">tags</a></code></li>
+<li><code><a title="dataproviders.InputDataSchema.timestamp" href="#dataproviders.InputDataSchema.timestamp">timestamp</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="dataproviders.InputDataSource" href="#dataproviders.InputDataSource">InputDataSource</a></code></h4>
+<ul class="two-column">
+<li><code><a title="dataproviders.InputDataSource.description" href="#dataproviders.InputDataSource.description">description</a></code></li>
+<li><code><a title="dataproviders.InputDataSource.environment" href="#dataproviders.InputDataSource.environment">environment</a></code></li>
+<li><code><a title="dataproviders.InputDataSource.name" href="#dataproviders.InputDataSource.name">name</a></code></li>
+<li><code><a title="dataproviders.InputDataSource.provider" href="#dataproviders.InputDataSource.provider">provider</a></code></li>
+<li><code><a title="dataproviders.InputDataSource.provider_config" href="#dataproviders.InputDataSource.provider_config">provider_config</a></code></li>
+<li><code><a title="dataproviders.InputDataSource.tags" href="#dataproviders.InputDataSource.tags">tags</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="dataproviders.OutputDataDestination" href="#dataproviders.OutputDataDestination">OutputDataDestination</a></code></h4>
 </li>
 </ul>
 </li>

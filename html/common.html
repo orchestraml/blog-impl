@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
 <meta name="generator" content="pdoc 0.10.0" />
-<title>model API documentation</title>
+<title>common API documentation</title>
 <meta name="description" content="" />
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
 <link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
@@ -19,34 +19,23 @@
 <main>
 <article id="content">
 <header>
-<h1 class="title">Module <code>model</code></h1>
+<h1 class="title">Module <code>common</code></h1>
 </header>
 <section id="section-intro">
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">from common import Tag
-from typing import Set
+<pre><code class="python">from typing import Tuple
 
 
-class Model:
-    &#34;&#34;&#34; &#34;&#34;&#34;
-
-    name: str
-    &#34;&#34;&#34;
-    Machine-readable but human-understandable name
+class Tag(Tuple):
+    &#34;&#34;&#34;key: value pair that is user definable.
+    Used to store information on any top-level object.
     &#34;&#34;&#34;
 
-    description: str
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
-    &#34;&#34;&#34;</code></pre>
+    key: str
+    value: str</code></pre>
 </details>
 </section>
 <section>
@@ -58,46 +47,39 @@ class Model:
 <section>
 <h2 class="section-title" id="header-classes">Classes</h2>
 <dl>
-<dt id="model.Model"><code class="flex name class">
-<span>class <span class="ident">Model</span></span>
+<dt id="common.Tag"><code class="flex name class">
+<span>class <span class="ident">Tag</span></span>
+<span>(</span><span>iterable=(), /)</span>
 </code></dt>
 <dd>
-<div class="desc"></div>
+<div class="desc"><p>key: value pair that is user definable.
+Used to store information on any top-level object.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">class Model:
-    &#34;&#34;&#34; &#34;&#34;&#34;
-
-    name: str
-    &#34;&#34;&#34;
-    Machine-readable but human-understandable name
+<pre><code class="python">class Tag(Tuple):
+    &#34;&#34;&#34;key: value pair that is user definable.
+    Used to store information on any top-level object.
     &#34;&#34;&#34;
 
-    description: str
-    &#34;&#34;&#34;
-    Human-readable notes
-    &#34;&#34;&#34;
-
-    tags: Set[Tag]
-    &#34;&#34;&#34;
-    Human or machine defined tags for easy indexing and reference
-    &#34;&#34;&#34;</code></pre>
+    key: str
+    value: str</code></pre>
 </details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li>builtins.tuple</li>
+<li>typing.Generic</li>
+</ul>
 <h3>Class variables</h3>
 <dl>
-<dt id="model.Model.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dt id="common.Tag.key"><code class="name">var <span class="ident">key</span> : str</code></dt>
 <dd>
-<div class="desc"><p>Human-readable notes</p></div>
+<div class="desc"></div>
 </dd>
-<dt id="model.Model.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dt id="common.Tag.value"><code class="name">var <span class="ident">value</span> : str</code></dt>
 <dd>
-<div class="desc"><p>Machine-readable but human-understandable name</p></div>
-</dd>
-<dt id="model.Model.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
-<dd>
-<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+<div class="desc"></div>
 </dd>
 </dl>
 </dd>
@@ -113,11 +95,10 @@ class Model:
 <li><h3><a href="#header-classes">Classes</a></h3>
 <ul>
 <li>
-<h4><code><a title="model.Model" href="#model.Model">Model</a></code></h4>
+<h4><code><a title="common.Tag" href="#common.Tag">Tag</a></code></h4>
 <ul class="">
-<li><code><a title="model.Model.description" href="#model.Model.description">description</a></code></li>
-<li><code><a title="model.Model.name" href="#model.Model.name">name</a></code></li>
-<li><code><a title="model.Model.tags" href="#model.Model.tags">tags</a></code></li>
+<li><code><a title="common.Tag.key" href="#common.Tag.key">key</a></code></li>
+<li><code><a title="common.Tag.value" href="#common.Tag.value">value</a></code></li>
 </ul>
 </li>
 </ul>

@@ -1,0 +1,1666 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+<meta name="generator" content="pdoc 0.10.0" />
+<title>features API documentation</title>
+<meta name="description" content="" />
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/sanitize.min.css" integrity="sha256-PK9q560IAAa6WVRRh76LtCaI8pjTJ2z11v0miyNNjrs=" crossorigin>
+<link rel="preload stylesheet" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/11.0.1/typography.min.css" integrity="sha256-7l/o7C8jubJiy74VsKTidCy1yBkRtiUGbVkYBylBqUg=" crossorigin>
+<link rel="stylesheet preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/styles/github.min.css" crossorigin>
+<style>:root{--highlight-color:#fe9}.flex{display:flex !important}body{line-height:1.5em}#content{padding:20px}#sidebar{padding:30px;overflow:hidden}#sidebar > *:last-child{margin-bottom:2cm}.http-server-breadcrumbs{font-size:130%;margin:0 0 15px 0}#footer{font-size:.75em;padding:5px 30px;border-top:1px solid #ddd;text-align:right}#footer p{margin:0 0 0 1em;display:inline-block}#footer p:last-child{margin-right:30px}h1,h2,h3,h4,h5{font-weight:300}h1{font-size:2.5em;line-height:1.1em}h2{font-size:1.75em;margin:1em 0 .50em 0}h3{font-size:1.4em;margin:25px 0 10px 0}h4{margin:0;font-size:105%}h1:target,h2:target,h3:target,h4:target,h5:target,h6:target{background:var(--highlight-color);padding:.2em 0}a{color:#058;text-decoration:none;transition:color .3s ease-in-out}a:hover{color:#e82}.title code{font-weight:bold}h2[id^="header-"]{margin-top:2em}.ident{color:#900}pre code{background:#f8f8f8;font-size:.8em;line-height:1.4em}code{background:#f2f2f1;padding:1px 4px;overflow-wrap:break-word}h1 code{background:transparent}pre{background:#f8f8f8;border:0;border-top:1px solid #ccc;border-bottom:1px solid #ccc;margin:1em 0;padding:1ex}#http-server-module-list{display:flex;flex-flow:column}#http-server-module-list div{display:flex}#http-server-module-list dt{min-width:10%}#http-server-module-list p{margin-top:0}.toc ul,#index{list-style-type:none;margin:0;padding:0}#index code{background:transparent}#index h3{border-bottom:1px solid #ddd}#index ul{padding:0}#index h4{margin-top:.6em;font-weight:bold}@media (min-width:200ex){#index .two-column{column-count:2}}@media (min-width:300ex){#index .two-column{column-count:3}}dl{margin-bottom:2em}dl dl:last-child{margin-bottom:4em}dd{margin:0 0 1em 3em}#header-classes + dl > dd{margin-bottom:3em}dd dd{margin-left:2em}dd p{margin:10px 0}.name{background:#eee;font-weight:bold;font-size:.85em;padding:5px 10px;display:inline-block;min-width:40%}.name:hover{background:#e0e0e0}dt:target .name{background:var(--highlight-color)}.name > span:first-child{white-space:nowrap}.name.class > span:nth-child(2){margin-left:.4em}.inherited{color:#999;border-left:5px solid #eee;padding-left:1em}.inheritance em{font-style:normal;font-weight:bold}.desc h2{font-weight:400;font-size:1.25em}.desc h3{font-size:1em}.desc dt code{background:inherit}.source summary,.git-link-div{color:#666;text-align:right;font-weight:400;font-size:.8em;text-transform:uppercase}.source summary > *{white-space:nowrap;cursor:pointer}.git-link{color:inherit;margin-left:1em}.source pre{max-height:500px;overflow:auto;margin:0}.source pre code{font-size:12px;overflow:visible}.hlist{list-style:none}.hlist li{display:inline}.hlist li:after{content:',\2002'}.hlist li:last-child:after{content:none}.hlist .hlist{display:inline;padding-left:1em}img{max-width:100%}td{padding:0 .5em}.admonition{padding:.1em .5em;margin-bottom:1em}.admonition-title{font-weight:bold}.admonition.note,.admonition.info,.admonition.important{background:#aef}.admonition.todo,.admonition.versionadded,.admonition.tip,.admonition.hint{background:#dfd}.admonition.warning,.admonition.versionchanged,.admonition.deprecated{background:#fd4}.admonition.error,.admonition.danger,.admonition.caution{background:lightpink}</style>
+<style media="screen and (min-width: 700px)">@media screen and (min-width:700px){#sidebar{width:30%;height:100vh;overflow:auto;position:sticky;top:0}#content{width:70%;max-width:100ch;padding:3em 4em;border-left:1px solid #ddd}pre code{font-size:1em}.item .name{font-size:1em}main{display:flex;flex-direction:row-reverse;justify-content:flex-end}.toc ul ul,#index ul{padding-left:1.5em}.toc > ul > li{margin-top:.5em}}</style>
+<style media="print">@media print{#sidebar h1{page-break-before:always}.source{display:none}}@media print{*{background:transparent !important;color:#000 !important;box-shadow:none !important;text-shadow:none !important}a[href]:after{content:" (" attr(href) ")";font-size:90%}a[href][title]:after{content:none}abbr[title]:after{content:" (" attr(title) ")"}.ir a:after,a[href^="javascript:"]:after,a[href^="#"]:after{content:""}pre,blockquote{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}tr,img{page-break-inside:avoid}img{max-width:100% !important}@page{margin:0.5cm}p,h2,h3{orphans:3;widows:3}h1,h2,h3,h4,h5,h6{page-break-after:avoid}}</style>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/10.1.1/highlight.min.js" integrity="sha256-Uv3H6lx7dJmRfRvH8TH6kJD1TSK1aFcwgx+mdg3epi8=" crossorigin></script>
+<script>window.addEventListener('DOMContentLoaded', () => hljs.initHighlighting())</script>
+</head>
+<body>
+<main>
+<article id="content">
+<header>
+<h1 class="title">Module <code>features</code></h1>
+</header>
+<section id="section-intro">
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">from __future__ import annotations
+from dataclasses import dataclass
+
+from typing import Iterable
+from pydantic import BaseModel
+from typing import List, Optional, Literal, Tuple, Set
+
+
+from datatypes import DataType
+from environments import EnvironmentType
+from datetime import timedelta
+from model import Model
+from common import Tag
+
+
+class DataCheck:
+    &#34;&#34;&#34;
+
+    Placeholder for Deequ, PyTest, great_expectation based checks
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    # TODO: Flesh out data checks.
+    # [1] Do we actually need these on ml_transformations?  If so, how do we provide checks for each individual ml_transformation since they are discrete?
+    # [2] What libraries do we support and in what order?  deequ, great_expectaions, pytest
+    # [3] Where do these get run?  How can we push this to the customer&#39;s data infra?
+
+
+class DataChecksForFeature:
+    raw_input_features: Optional[DataCheck]
+    raw_input_lookups: Optional[DataCheck]
+    post_business_logic: Optional[DataCheck]
+    post_ml_transformation: Optional[DataCheck]
+
+
+class Code:
+    &#34;&#34;&#34;
+    Parent class of all code types.
+    Throws an error if used directly.
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+
+class DataCode(Code):
+    &#34;&#34;&#34;
+    Code that takes 1+ Features and returns 1+ Features
+
+    &#34;&#34;&#34;
+
+    records_needed = Literal[&#34;SingleRecord&#34;, &#34;Aggregation&#34;, &#34;AllRecords&#34;, &#34;Join&#34;]
+    &#34;&#34;&#34;
+    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)
+
+    Aggregation: Requires multiple records of data from the same GROUP BY features.
+
+    Join: Requires records obtained by joining to a Dataset with differnet Key(s)
+
+    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
+
+    &#34;&#34;&#34;
+
+
+class MLTransformation:
+    &#34;&#34;&#34;
+    Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    input_datatype: List[DataType]
+    &#34;&#34;&#34;
+    What DataType(s) does this transformation accept?
+    &#34;&#34;&#34;
+
+    output_datatype: List[DataType]
+    &#34;&#34;&#34;
+    What DataType(s) does this transformation output?
+    &#34;&#34;&#34;
+
+    records_needed = Literal[&#34;SingleRecord&#34;, &#34;AllRecords&#34;]
+    &#34;&#34;&#34;
+    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed).  Examples include image transformations (resize, etc) or embedding models, token lookups, etc.
+
+    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
+
+    #TODO: Any use cases for joins or aggregation aka GROUP BY?  I don&#39;t think so...
+    &#34;&#34;&#34;
+
+
+class AutomaticTransformation(MLTransformation):
+    &#34;&#34;&#34;
+    Orchestra applies its pre-defined logic, based on the following hueristics computed using the data:
+
+    TODO: define these hueristics
+    &#34;&#34;&#34;
+
+    # TODO: Implement logic so that this class returns the correct values for output_datatype
+
+
+class ModelEncoderTransformation(MLTransformation):
+    &#34;&#34;&#34;
+    Applies another ML model to the feature&#39;s value, for example, applying an embedding model such as BERT to encode a string.
+    &#34;&#34;&#34;
+
+    model: Model
+
+
+class CustomTransformation(MLTransformation):
+    &#34;&#34;&#34;
+    Custom function that operates at a row or dataset level.
+    &#34;&#34;&#34;
+
+    data_code: DataCode
+    &#34;&#34;&#34;
+    the code used to deliver this transformation
+    &#34;&#34;&#34;
+
+    # TODO: Define how Custom pre-processing will work
+
+
+# [1] How do we pass the full dataset if needed to learn?
+# [2] How do we enable storing of the learned parameters or artifacts?
+# [3] Where does the code itself execute?  How can we make this happen within the customer&#39;s current infra?
+
+
+class SciKitLearnTransformation(MLTransformation):
+    &#34;&#34;&#34;
+    Orchestra implemented wrappers around the SciKit pre-processing library
+    &#34;&#34;&#34;
+
+    # TODO: Implement this...
+
+    # TODO: which other libraries do we support for MLTransformations.SciKitLearn?
+    # https://scikit-learn.org/stable/modules/classes.html#module-sklearn.preprocessing
+    # https://www.tensorflow.org/guide/keras/preprocessing_layers#keras_preprocessing
+    # others?
+
+
+@dataclass
+class Feature:
+    &#34;&#34;&#34;An individual feature.
+
+    Visual depiction: https://ibb.co/9t2zhXS
+
+    Features form the basis of machine learning and are the core unit of abstraction in Orchestra&#39;s data model.
+
+    Author&#39;s note (EP):
+    I&#39;ve heard different perspectives on what a &#34;feature&#34; is, particularly when speaking to practitioners who exclusively work with modern NLP or computer vision techniques and only have model inputs that are embeddings (floating point vectors) created directly from the raw data without any business logic (e.g., text —&gt; embedding or image —&gt; embedding).  In this situation, I often hear &#34;we don&#39;t have features, we just use embeddings as model input” although I have also heard &#34;we do a bit of text clean up before applying an embedding based model in order to reduce our cost profile so it is a feature.&#34;
+
+    I believe there is great benefit to creating a common definition of a Feature that includes both modern techniques (ala transformers, etc) and traditionally engineered features (ala feature engineering) as I expect for the foreseeable future (note 1) a single company&#39;s full breadth of models will include both.  This common definition will also ease communication with business stakeholders about how machine learning works.
+    &#34;&#34;&#34;
+
+    def __init__():
+        super().__init__()
+        return
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    input_features: List[Feature]
+    &#34;&#34;&#34;
+    The input data used to create this feature.
+
+    If Features from 2+ different `Datasets` are used, both `Datasets` must share the same `Key` space.
+    &#34;&#34;&#34;
+
+    input_lookups: Optional[List[Feature]]
+    &#34;&#34;&#34;
+    Optional, used for join-like logic or where a value must be looked up from another table that doesn&#39;t share the primary key space. 
+    
+    The `Key(s)` of each `input_lookups[Feature]`&#39;s `Dataset` must be included as `input_features`
+    &#34;&#34;&#34;
+
+    human_datatype: DataType
+    &#34;&#34;&#34;
+    The human-readable data type that is output by the code specified by `business_logic`
+    &#34;&#34;&#34;
+
+    model_datatypes: List[DataType]
+    &#34;&#34;&#34;
+    Output only.  Set automatically based on the `ml_transformations.output_datatype`&#39;s&#34;&#34;&#34;
+
+    business_logics: Optional[List[DataCode]]
+    &#34;&#34;&#34;
+    Optional. Business logic that translates the input_features into this feature.  Each provided DataCode is executed in order, passing information between steps.
+
+    Can be 1+ DataCodes. 
+
+    A transformation created based on a business understanding of the data in order to provide additional context to the model in order to accelerate or simplify how it learns patterns in the data.  Examples include calculating a total purchase amount that includes tax, collapsing categories that are actually the same, etc.  Business logic is optional (for example, if the feature is “chat message” there is no need for additional business logic).  
+
+    A common piece of business logic to apply is an aggregation over multiple rows of data, or combining values over a specific time period through an average, count, sum, etc (in SQL, this is referred to as a GROUP BY).  This pattern creates complexity for productionizing features since at model inference time, typically only the current row of data is available.  Orchestra&#39;s Aggregation abstraction simplifies the process of writing production-ready aggregations [see action items below for a discussion].
+
+    Author&#39;s note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.  Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.  Potato-patato.  Irregardless of what you call it, folks apply business logic, then transform everything to numbers.
+   
+    &#34;&#34;&#34;
+
+    ml_transformations: Optional[List[MLTransformation]]
+    &#34;&#34;&#34;
+    Optional ML transformations (aka pre-processing aka functions that translate from human-readable data to model-readable data).
+    
+    If not provided, Orchestra will check that only model-readable DataTypes pass through.
+
+    ML-specific transformations: a transformation that is done only for the purposes of translating the data into a format a model can understand.  Said differently, these transformations would never happen outside the context of machine learning (e.g., would not be done inside a traditional BI table) and do NOT change what the data describes, only how the data is represented (e.g., a ML transformation will not go from “meaning A” to “meaning B”).
+
+    Author&#39;s note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.  Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.  Potato-patato.  Irregardless of what you call it, folks apply business logic, then transform everything to numbers.
+
+    &#34;&#34;&#34;
+
+    freshness: timedelta
+    &#34;&#34;&#34;
+    How frequently does this feature&#39;s value need to be updated to reflect the most recently available upstream/source data?
+
+    Implemented as: If [now() - time_of_last_computation] &gt;= `freshness`, recompute the value if any of input_features have changed within the time window [now() --&gt; time_of_last_computation]
+    
+    &#34;&#34;&#34;
+
+    data_checks: Optional[DataChecksForFeature]
+    &#34;&#34;&#34;
+    Any data quality or data distribution checks that should be performed.  Executed by Orchesrta using the user&#39;s supplied checking framwork.
+    &#34;&#34;&#34;
+
+
+class RawFeature(Feature):
+    &#34;&#34;&#34;
+    Data that comes directly from a DataProvider and will never be manipulated directly by Orchestra.  If a value here is “bad” - it is 100% the fault of the DataProvider&#39;s owner 😉
+    &#34;&#34;&#34;
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+
+    freshness: timedelta
+    &#34;&#34;&#34;
+    Output only.
+    Automatically generated by Orchestra based on the DatasetProvider attached to the Dataset
+    &#34;&#34;&#34;
+
+
+class DerivedFeature(Feature):
+    &#34;&#34;&#34;
+    Data that is manipulated by Orchestra based on the user&#39;s declarations.  This is the most commonly used class within Orchestra.
+    &#34;&#34;&#34;
+
+
+class Key(Feature):
+    &#34;&#34;&#34;A primary or secondary key field.  Used for aggregations and lookups.&#34;&#34;&#34;
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+    freshness: None
+    model_datatypes: None
+
+
+class Prediction(Feature):
+    &#34;&#34;&#34;A data value that was generated by a trained ML model.  Includes both predictions served directly to an end user, but also predictions used as part of an `ml_transformation`.&#34;&#34;&#34;
+
+    model_used: Model
+    &#34;&#34;&#34;
+    Output only. Automatically generated by Orchestra based on the Model that made this prediction.
+    What `Model` delivered this prediction?  References a specific version. The Model object includes all metadata &amp; lineage such as training data used, version info, etc
+    &#34;&#34;&#34;
+
+    input_features: List[Feature]
+    &#34;&#34;&#34;
+    Output only. Automatically generated by Orchestra based on the Model that made this prediction.
+    What are the Model&#39;s inputs?
+    &#34;&#34;&#34;
+
+    # TODO: Decide if business_logic and ml_transformations can be defined for a Prediction.  I can see a use case where you might use business_logic to transform the raw prediciton into a user-facing value (e.g., if &gt;.5 confidence, use value, otherwise, ...).  Similarly, I can maybe see a use case for ml_transformation where the prediction goes through some sort of normalization??
+
+    ml_transformations: None
+    business_logic: None
+
+    # TODO: Will we be able to represent model predictions with human_datatype as-is?  I think we might need to make changes to account for models such as a multi-class model, saving the predic_proba, etc.  It may be that we create a special datatype for prediction and then use human_datatype to represent the value after all business_logic is applied??
+
+
+class Label(Feature):
+    &#34;&#34;&#34;A data value that is used to train a semi-supervised or supervised ML model&#34;&#34;&#34;
+
+    # TODO: I /think/ Label can be identical, but we may want to exclude ml_transformations?  But need to think about this a bit more...
+
+
+class RawLabel(Label):
+    &#34;&#34;&#34;
+    A label that comes directly from a DataProvider without any manipulation.  If it&#39;s wrong it is the upstream provider&#39;s fault ;-)
+    &#34;&#34;&#34;
+
+
+class DerivedLabel(Label):
+    &#34;&#34;&#34;
+    A label that has business_logic applied to get the correct value.  For example, removing known bad labels, etc.
+    &#34;&#34;&#34;
+
+
+class Timestamp(Feature):
+    &#34;&#34;&#34;
+    A data value that represents the timestamp of when other Features in that row of data were created or updated.  Used for time-travel and time-aware joins.
+    &#34;&#34;&#34;
+
+    timestamp_format: str
+    &#34;&#34;&#34;
+    Format of the timestamp e.g., seconds since epoch, YYYYmmddHHss, etc
+    &#34;&#34;&#34;
+
+    # TODO: Should timestamp be a special sub-class or not? I think yes but 85% sure.
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+    freshness: None
+    data_checks: None
+
+
+class Aggregation(DataCode):
+    &#34;&#34;&#34;
+    Defines an aggregation function.
+
+    aka GROUP BY in SQL
+
+    &#34;&#34;&#34;
+
+    records_needed: Literal[&#34;Aggregation&#34;]
+    &#34;&#34;&#34;
+    Default value, can&#39;t be changed
+    &#34;&#34;&#34;
+
+    aggregate_function: Literal[&#34;SUM&#34;, &#34;COUNT&#34;, &#34;MAX&#34;, &#34;MIN&#34;, &#34;AVG&#34;, &#34;CUSTOM&#34;]
+    &#34;&#34;&#34;
+    What function is used to compute the aggregation?
+
+    All except CUSTOM are built-in to Orchestra.
+
+    SELECT aggregate_function(Feature) FROM ...
+
+    Credit: Portions borrowed from the Feathr spec 
+    &#34;&#34;&#34;
+
+    aggregate_by: List[Feature]
+    &#34;&#34;&#34;
+    What Features are we aggregating by?
+
+    ... GROUP BY [aggregate_by, ...]
+    &#34;&#34;&#34;
+
+    custom_function: Optional[DataCode]
+    &#34;&#34;&#34;
+        TODO: define the limits of what types of DataCode can be provided here
+    &#34;&#34;&#34;
+
+    window: str
+    &#34;&#34;&#34;
+    Either a time window or the last N records.
+
+    d(day)
+    h(hour)
+    m(minute)
+    s(second)
+    n(last n records)
+    
+    Examples: “7d’ or “5h” or “3m” or “1s” or &#34;5n&#34;
+
+    Any time window: ... WHERE now() - record_timestamp &lt;= window
+    Any N window: ... ORDER BY [order_by, ...] LIMIT n
+
+    Credit: Portions borrowed from the Feathr spec 
+    &#34;&#34;&#34;
+
+    order_by: Optional[tuple(List[Feature], Literal[&#34;DESC&#34;, &#34;ASC&#34;])]
+    &#34;&#34;&#34;
+    Features to sort the records by
+
+    Only applies if window is a last N records.
+    &#34;&#34;&#34;</code></pre>
+</details>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+</section>
+<section>
+<h2 class="section-title" id="header-classes">Classes</h2>
+<dl>
+<dt id="features.Aggregation"><code class="flex name class">
+<span>class <span class="ident">Aggregation</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Defines an aggregation function.</p>
+<p>aka GROUP BY in SQL</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Aggregation(DataCode):
+    &#34;&#34;&#34;
+    Defines an aggregation function.
+
+    aka GROUP BY in SQL
+
+    &#34;&#34;&#34;
+
+    records_needed: Literal[&#34;Aggregation&#34;]
+    &#34;&#34;&#34;
+    Default value, can&#39;t be changed
+    &#34;&#34;&#34;
+
+    aggregate_function: Literal[&#34;SUM&#34;, &#34;COUNT&#34;, &#34;MAX&#34;, &#34;MIN&#34;, &#34;AVG&#34;, &#34;CUSTOM&#34;]
+    &#34;&#34;&#34;
+    What function is used to compute the aggregation?
+
+    All except CUSTOM are built-in to Orchestra.
+
+    SELECT aggregate_function(Feature) FROM ...
+
+    Credit: Portions borrowed from the Feathr spec 
+    &#34;&#34;&#34;
+
+    aggregate_by: List[Feature]
+    &#34;&#34;&#34;
+    What Features are we aggregating by?
+
+    ... GROUP BY [aggregate_by, ...]
+    &#34;&#34;&#34;
+
+    custom_function: Optional[DataCode]
+    &#34;&#34;&#34;
+        TODO: define the limits of what types of DataCode can be provided here
+    &#34;&#34;&#34;
+
+    window: str
+    &#34;&#34;&#34;
+    Either a time window or the last N records.
+
+    d(day)
+    h(hour)
+    m(minute)
+    s(second)
+    n(last n records)
+    
+    Examples: “7d’ or “5h” or “3m” or “1s” or &#34;5n&#34;
+
+    Any time window: ... WHERE now() - record_timestamp &lt;= window
+    Any N window: ... ORDER BY [order_by, ...] LIMIT n
+
+    Credit: Portions borrowed from the Feathr spec 
+    &#34;&#34;&#34;
+
+    order_by: Optional[tuple(List[Feature], Literal[&#34;DESC&#34;, &#34;ASC&#34;])]
+    &#34;&#34;&#34;
+    Features to sort the records by
+
+    Only applies if window is a last N records.
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.DataCode" href="#features.DataCode">DataCode</a></li>
+<li><a title="features.Code" href="#features.Code">Code</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.Aggregation.aggregate_by"><code class="name">var <span class="ident">aggregate_by</span> : List[<a title="features.Feature" href="#features.Feature">Feature</a>]</code></dt>
+<dd>
+<div class="desc"><p>What Features are we aggregating by?</p>
+<p>&hellip; GROUP BY [aggregate_by, &hellip;]</p></div>
+</dd>
+<dt id="features.Aggregation.aggregate_function"><code class="name">var <span class="ident">aggregate_function</span> : Literal['SUM', 'COUNT', 'MAX', 'MIN', 'AVG', 'CUSTOM']</code></dt>
+<dd>
+<div class="desc"><p>What function is used to compute the aggregation?</p>
+<p>All except CUSTOM are built-in to Orchestra.</p>
+<p>SELECT aggregate_function(Feature) FROM &hellip;</p>
+<p>Credit: Portions borrowed from the Feathr spec</p></div>
+</dd>
+<dt id="features.Aggregation.custom_function"><code class="name">var <span class="ident">custom_function</span> : Optional[<a title="features.DataCode" href="#features.DataCode">DataCode</a>]</code></dt>
+<dd>
+<div class="desc"><p>TODO: define the limits of what types of DataCode can be provided here</p></div>
+</dd>
+<dt id="features.Aggregation.order_by"><code class="name">var <span class="ident">order_by</span> : Optional[tuple(List[<a title="features.Feature" href="#features.Feature">Feature</a>], Literal['DESC', 'ASC'])]</code></dt>
+<dd>
+<div class="desc"><p>Features to sort the records by</p>
+<p>Only applies if window is a last N records.</p></div>
+</dd>
+<dt id="features.Aggregation.window"><code class="name">var <span class="ident">window</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Either a time window or the last N records.</p>
+<p>d(day)
+h(hour)
+m(minute)
+s(second)
+n(last n records)</p>
+<p>Examples: “7d’ or “5h” or “3m” or “1s” or "5n"</p>
+<p>Any time window: &hellip; WHERE now() - record_timestamp &lt;= window
+Any N window: &hellip; ORDER BY [order_by, &hellip;] LIMIT n</p>
+<p>Credit: Portions borrowed from the Feathr spec</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.DataCode" href="#features.DataCode">DataCode</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.DataCode.records_needed" href="#features.DataCode.records_needed">records_needed</a></code></li>
+</ul>
+</li>
+<li><code><b><a title="features.Code" href="#features.Code">Code</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Code.tags" href="#features.Code.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.AutomaticTransformation"><code class="flex name class">
+<span>class <span class="ident">AutomaticTransformation</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Orchestra applies its pre-defined logic, based on the following hueristics computed using the data:</p>
+<p>TODO: define these hueristics</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class AutomaticTransformation(MLTransformation):
+    &#34;&#34;&#34;
+    Orchestra applies its pre-defined logic, based on the following hueristics computed using the data:
+
+    TODO: define these hueristics
+    &#34;&#34;&#34;
+
+    # TODO: Implement logic so that this class returns the correct values for output_datatype</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.MLTransformation.input_datatype" href="#features.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.output_datatype" href="#features.MLTransformation.output_datatype">output_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.records_needed" href="#features.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="features.MLTransformation.tags" href="#features.MLTransformation.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.Code"><code class="flex name class">
+<span>class <span class="ident">Code</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Parent class of all code types.
+Throws an error if used directly.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Code:
+    &#34;&#34;&#34;
+    Parent class of all code types.
+    Throws an error if used directly.
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="features.DataCode" href="#features.DataCode">DataCode</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.Code.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="features.CustomTransformation"><code class="flex name class">
+<span>class <span class="ident">CustomTransformation</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Custom function that operates at a row or dataset level.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class CustomTransformation(MLTransformation):
+    &#34;&#34;&#34;
+    Custom function that operates at a row or dataset level.
+    &#34;&#34;&#34;
+
+    data_code: DataCode
+    &#34;&#34;&#34;
+    the code used to deliver this transformation
+    &#34;&#34;&#34;
+
+    # TODO: Define how Custom pre-processing will work</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.CustomTransformation.data_code"><code class="name">var <span class="ident">data_code</span> : <a title="features.DataCode" href="#features.DataCode">DataCode</a></code></dt>
+<dd>
+<div class="desc"><p>the code used to deliver this transformation</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.MLTransformation.input_datatype" href="#features.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.output_datatype" href="#features.MLTransformation.output_datatype">output_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.records_needed" href="#features.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="features.MLTransformation.tags" href="#features.MLTransformation.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.DataCheck"><code class="flex name class">
+<span>class <span class="ident">DataCheck</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Placeholder for Deequ, PyTest, great_expectation based checks</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataCheck:
+    &#34;&#34;&#34;
+
+    Placeholder for Deequ, PyTest, great_expectation based checks
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    # TODO: Flesh out data checks.
+    # [1] Do we actually need these on ml_transformations?  If so, how do we provide checks for each individual ml_transformation since they are discrete?
+    # [2] What libraries do we support and in what order?  deequ, great_expectaions, pytest
+    # [3] Where do these get run?  How can we push this to the customer&#39;s data infra?</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.DataCheck.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="features.DataChecksForFeature"><code class="flex name class">
+<span>class <span class="ident">DataChecksForFeature</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataChecksForFeature:
+    raw_input_features: Optional[DataCheck]
+    raw_input_lookups: Optional[DataCheck]
+    post_business_logic: Optional[DataCheck]
+    post_ml_transformation: Optional[DataCheck]</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.DataChecksForFeature.post_business_logic"><code class="name">var <span class="ident">post_business_logic</span> : Optional[<a title="features.DataCheck" href="#features.DataCheck">DataCheck</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="features.DataChecksForFeature.post_ml_transformation"><code class="name">var <span class="ident">post_ml_transformation</span> : Optional[<a title="features.DataCheck" href="#features.DataCheck">DataCheck</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="features.DataChecksForFeature.raw_input_features"><code class="name">var <span class="ident">raw_input_features</span> : Optional[<a title="features.DataCheck" href="#features.DataCheck">DataCheck</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="features.DataChecksForFeature.raw_input_lookups"><code class="name">var <span class="ident">raw_input_lookups</span> : Optional[<a title="features.DataCheck" href="#features.DataCheck">DataCheck</a>]</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+</dd>
+<dt id="features.DataCode"><code class="flex name class">
+<span>class <span class="ident">DataCode</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Code that takes 1+ Features and returns 1+ Features</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DataCode(Code):
+    &#34;&#34;&#34;
+    Code that takes 1+ Features and returns 1+ Features
+
+    &#34;&#34;&#34;
+
+    records_needed = Literal[&#34;SingleRecord&#34;, &#34;Aggregation&#34;, &#34;AllRecords&#34;, &#34;Join&#34;]
+    &#34;&#34;&#34;
+    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)
+
+    Aggregation: Requires multiple records of data from the same GROUP BY features.
+
+    Join: Requires records obtained by joining to a Dataset with differnet Key(s)
+
+    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
+
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Code" href="#features.Code">Code</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="features.Aggregation" href="#features.Aggregation">Aggregation</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.DataCode.records_needed"><code class="name">var <span class="ident">records_needed</span></code></dt>
+<dd>
+<div class="desc"><p>(default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)</p>
+<p>Aggregation: Requires multiple records of data from the same GROUP BY features.</p>
+<p>Join: Requires records obtained by joining to a Dataset with differnet Key(s)</p>
+<p>AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Code" href="#features.Code">Code</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Code.tags" href="#features.Code.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.DerivedFeature"><code class="flex name class">
+<span>class <span class="ident">DerivedFeature</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Data that is manipulated by Orchestra based on the user's declarations.
+This is the most commonly used class within Orchestra.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DerivedFeature(Feature):
+    &#34;&#34;&#34;
+    Data that is manipulated by Orchestra based on the user&#39;s declarations.  This is the most commonly used class within Orchestra.
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Feature" href="#features.Feature">Feature</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Feature" href="#features.Feature">Feature</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.DerivedLabel"><code class="flex name class">
+<span>class <span class="ident">DerivedLabel</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>A label that has business_logic applied to get the correct value.
+For example, removing known bad labels, etc.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class DerivedLabel(Label):
+    &#34;&#34;&#34;
+    A label that has business_logic applied to get the correct value.  For example, removing known bad labels, etc.
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Label" href="#features.Label">Label</a></li>
+<li><a title="features.Feature" href="#features.Feature">Feature</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Feature" href="#features.Feature">Feature</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.Feature"><code class="flex name class">
+<span>class <span class="ident">Feature</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>An individual feature.</p>
+<p>Visual depiction: <a href="https://ibb.co/9t2zhXS">https://ibb.co/9t2zhXS</a></p>
+<p>Features form the basis of machine learning and are the core unit of abstraction in Orchestra's data model.</p>
+<p>Author's note (EP):
+I've heard different perspectives on what a "feature" is, particularly when speaking to practitioners who exclusively work with modern NLP or computer vision techniques and only have model inputs that are embeddings (floating point vectors) created directly from the raw data without any business logic (e.g., text —&gt; embedding or image —&gt; embedding).
+In this situation, I often hear "we don't have features, we just use embeddings as model input” although I have also heard "we do a bit of text clean up before applying an embedding based model in order to reduce our cost profile so it is a feature."</p>
+<p>I believe there is great benefit to creating a common definition of a Feature that includes both modern techniques (ala transformers, etc) and traditionally engineered features (ala feature engineering) as I expect for the foreseeable future (note 1) a single company's full breadth of models will include both.
+This common definition will also ease communication with business stakeholders about how machine learning works.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">@dataclass
+class Feature:
+    &#34;&#34;&#34;An individual feature.
+
+    Visual depiction: https://ibb.co/9t2zhXS
+
+    Features form the basis of machine learning and are the core unit of abstraction in Orchestra&#39;s data model.
+
+    Author&#39;s note (EP):
+    I&#39;ve heard different perspectives on what a &#34;feature&#34; is, particularly when speaking to practitioners who exclusively work with modern NLP or computer vision techniques and only have model inputs that are embeddings (floating point vectors) created directly from the raw data without any business logic (e.g., text —&gt; embedding or image —&gt; embedding).  In this situation, I often hear &#34;we don&#39;t have features, we just use embeddings as model input” although I have also heard &#34;we do a bit of text clean up before applying an embedding based model in order to reduce our cost profile so it is a feature.&#34;
+
+    I believe there is great benefit to creating a common definition of a Feature that includes both modern techniques (ala transformers, etc) and traditionally engineered features (ala feature engineering) as I expect for the foreseeable future (note 1) a single company&#39;s full breadth of models will include both.  This common definition will also ease communication with business stakeholders about how machine learning works.
+    &#34;&#34;&#34;
+
+    def __init__():
+        super().__init__()
+        return
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    input_features: List[Feature]
+    &#34;&#34;&#34;
+    The input data used to create this feature.
+
+    If Features from 2+ different `Datasets` are used, both `Datasets` must share the same `Key` space.
+    &#34;&#34;&#34;
+
+    input_lookups: Optional[List[Feature]]
+    &#34;&#34;&#34;
+    Optional, used for join-like logic or where a value must be looked up from another table that doesn&#39;t share the primary key space. 
+    
+    The `Key(s)` of each `input_lookups[Feature]`&#39;s `Dataset` must be included as `input_features`
+    &#34;&#34;&#34;
+
+    human_datatype: DataType
+    &#34;&#34;&#34;
+    The human-readable data type that is output by the code specified by `business_logic`
+    &#34;&#34;&#34;
+
+    model_datatypes: List[DataType]
+    &#34;&#34;&#34;
+    Output only.  Set automatically based on the `ml_transformations.output_datatype`&#39;s&#34;&#34;&#34;
+
+    business_logics: Optional[List[DataCode]]
+    &#34;&#34;&#34;
+    Optional. Business logic that translates the input_features into this feature.  Each provided DataCode is executed in order, passing information between steps.
+
+    Can be 1+ DataCodes. 
+
+    A transformation created based on a business understanding of the data in order to provide additional context to the model in order to accelerate or simplify how it learns patterns in the data.  Examples include calculating a total purchase amount that includes tax, collapsing categories that are actually the same, etc.  Business logic is optional (for example, if the feature is “chat message” there is no need for additional business logic).  
+
+    A common piece of business logic to apply is an aggregation over multiple rows of data, or combining values over a specific time period through an average, count, sum, etc (in SQL, this is referred to as a GROUP BY).  This pattern creates complexity for productionizing features since at model inference time, typically only the current row of data is available.  Orchestra&#39;s Aggregation abstraction simplifies the process of writing production-ready aggregations [see action items below for a discussion].
+
+    Author&#39;s note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.  Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.  Potato-patato.  Irregardless of what you call it, folks apply business logic, then transform everything to numbers.
+   
+    &#34;&#34;&#34;
+
+    ml_transformations: Optional[List[MLTransformation]]
+    &#34;&#34;&#34;
+    Optional ML transformations (aka pre-processing aka functions that translate from human-readable data to model-readable data).
+    
+    If not provided, Orchestra will check that only model-readable DataTypes pass through.
+
+    ML-specific transformations: a transformation that is done only for the purposes of translating the data into a format a model can understand.  Said differently, these transformations would never happen outside the context of machine learning (e.g., would not be done inside a traditional BI table) and do NOT change what the data describes, only how the data is represented (e.g., a ML transformation will not go from “meaning A” to “meaning B”).
+
+    Author&#39;s note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.  Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.  Potato-patato.  Irregardless of what you call it, folks apply business logic, then transform everything to numbers.
+
+    &#34;&#34;&#34;
+
+    freshness: timedelta
+    &#34;&#34;&#34;
+    How frequently does this feature&#39;s value need to be updated to reflect the most recently available upstream/source data?
+
+    Implemented as: If [now() - time_of_last_computation] &gt;= `freshness`, recompute the value if any of input_features have changed within the time window [now() --&gt; time_of_last_computation]
+    
+    &#34;&#34;&#34;
+
+    data_checks: Optional[DataChecksForFeature]
+    &#34;&#34;&#34;
+    Any data quality or data distribution checks that should be performed.  Executed by Orchesrta using the user&#39;s supplied checking framwork.
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="features.DerivedFeature" href="#features.DerivedFeature">DerivedFeature</a></li>
+<li><a title="features.Key" href="#features.Key">Key</a></li>
+<li><a title="features.Label" href="#features.Label">Label</a></li>
+<li><a title="features.Prediction" href="#features.Prediction">Prediction</a></li>
+<li><a title="features.RawFeature" href="#features.RawFeature">RawFeature</a></li>
+<li><a title="features.Timestamp" href="#features.Timestamp">Timestamp</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.Feature.business_logics"><code class="name">var <span class="ident">business_logics</span> : Optional[List[<a title="features.DataCode" href="#features.DataCode">DataCode</a>]]</code></dt>
+<dd>
+<div class="desc"><p>Optional. Business logic that translates the input_features into this feature.
+Each provided DataCode is executed in order, passing information between steps.</p>
+<p>Can be 1+ DataCodes. </p>
+<p>A transformation created based on a business understanding of the data in order to provide additional context to the model in order to accelerate or simplify how it learns patterns in the data.
+Examples include calculating a total purchase amount that includes tax, collapsing categories that are actually the same, etc.
+Business logic is optional (for example, if the feature is “chat message” there is no need for additional business logic).
+</p>
+<p>A common piece of business logic to apply is an aggregation over multiple rows of data, or combining values over a specific time period through an average, count, sum, etc (in SQL, this is referred to as a GROUP BY).
+This pattern creates complexity for productionizing features since at model inference time, typically only the current row of data is available.
+Orchestra's Aggregation abstraction simplifies the process of writing production-ready aggregations [see action items below for a discussion].</p>
+<p>Author's note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.
+Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.
+Potato-patato.
+Irregardless of what you call it, folks apply business logic, then transform everything to numbers.</p></div>
+</dd>
+<dt id="features.Feature.data_checks"><code class="name">var <span class="ident">data_checks</span> : Optional[<a title="features.DataChecksForFeature" href="#features.DataChecksForFeature">DataChecksForFeature</a>]</code></dt>
+<dd>
+<div class="desc"><p>Any data quality or data distribution checks that should be performed.
+Executed by Orchesrta using the user's supplied checking framwork.</p></div>
+</dd>
+<dt id="features.Feature.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Human-readable notes</p></div>
+</dd>
+<dt id="features.Feature.freshness"><code class="name">var <span class="ident">freshness</span> : datetime.timedelta</code></dt>
+<dd>
+<div class="desc"><p>How frequently does this feature's value need to be updated to reflect the most recently available upstream/source data?</p>
+<p>Implemented as: If [now() - time_of_last_computation] &gt;= <code>freshness</code>, recompute the value if any of input_features have changed within the time window [now() &ndash;&gt; time_of_last_computation]</p></div>
+</dd>
+<dt id="features.Feature.human_datatype"><code class="name">var <span class="ident">human_datatype</span> : <a title="datatypes.DataType" href="datatypes.html#datatypes.DataType">DataType</a></code></dt>
+<dd>
+<div class="desc"><p>The human-readable data type that is output by the code specified by <code>business_logic</code></p></div>
+</dd>
+<dt id="features.Feature.input_features"><code class="name">var <span class="ident">input_features</span> : List[<a title="features.Feature" href="#features.Feature">Feature</a>]</code></dt>
+<dd>
+<div class="desc"><p>The input data used to create this feature.</p>
+<p>If Features from 2+ different <code>Datasets</code> are used, both <code>Datasets</code> must share the same <code><a title="features.Key" href="#features.Key">Key</a></code> space.</p></div>
+</dd>
+<dt id="features.Feature.input_lookups"><code class="name">var <span class="ident">input_lookups</span> : Optional[List[<a title="features.Feature" href="#features.Feature">Feature</a>]]</code></dt>
+<dd>
+<div class="desc"><p>Optional, used for join-like logic or where a value must be looked up from another table that doesn't share the primary key space. </p>
+<p>The <code><a title="features.Key" href="#features.Key">Key</a>(s)</code> of each <code>input_lookups[<a title="features.Feature" href="#features.Feature">Feature</a>]</code>'s <code>Dataset</code> must be included as <code>input_features</code></p></div>
+</dd>
+<dt id="features.Feature.ml_transformations"><code class="name">var <span class="ident">ml_transformations</span> : Optional[List[<a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a>]]</code></dt>
+<dd>
+<div class="desc"><p>Optional ML transformations (aka pre-processing aka functions that translate from human-readable data to model-readable data).</p>
+<p>If not provided, Orchestra will check that only model-readable DataTypes pass through.</p>
+<p>ML-specific transformations: a transformation that is done only for the purposes of translating the data into a format a model can understand.
+Said differently, these transformations would never happen outside the context of machine learning (e.g., would not be done inside a traditional BI table) and do NOT change what the data describes, only how the data is represented (e.g., a ML transformation will not go from “meaning A” to “meaning B”).</p>
+<p>Author's note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.
+Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.
+Potato-patato.
+Irregardless of what you call it, folks apply business logic, then transform everything to numbers.</p></div>
+</dd>
+<dt id="features.Feature.model_datatypes"><code class="name">var <span class="ident">model_datatypes</span> : List[<a title="datatypes.DataType" href="datatypes.html#datatypes.DataType">DataType</a>]</code></dt>
+<dd>
+<div class="desc"><p>Output only.
+Set automatically based on the <code>ml_transformations.output_datatype</code>'s</p></div>
+</dd>
+<dt id="features.Feature.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+</dd>
+<dt id="features.Feature.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="features.Key"><code class="flex name class">
+<span>class <span class="ident">Key</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>A primary or secondary key field.
+Used for aggregations and lookups.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Key(Feature):
+    &#34;&#34;&#34;A primary or secondary key field.  Used for aggregations and lookups.&#34;&#34;&#34;
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+    freshness: None
+    model_datatypes: None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Feature" href="#features.Feature">Feature</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.Key.business_logic"><code class="name">var <span class="ident">business_logic</span> : None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Feature" href="#features.Feature">Feature</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.Label"><code class="flex name class">
+<span>class <span class="ident">Label</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>A data value that is used to train a semi-supervised or supervised ML model</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Label(Feature):
+    &#34;&#34;&#34;A data value that is used to train a semi-supervised or supervised ML model&#34;&#34;&#34;
+
+    # TODO: I /think/ Label can be identical, but we may want to exclude ml_transformations?  But need to think about this a bit more...</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Feature" href="#features.Feature">Feature</a></li>
+</ul>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="features.DerivedLabel" href="#features.DerivedLabel">DerivedLabel</a></li>
+<li><a title="features.RawLabel" href="#features.RawLabel">RawLabel</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Feature" href="#features.Feature">Feature</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.MLTransformation"><code class="flex name class">
+<span>class <span class="ident">MLTransformation</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Any transformation logic that translates a human-readable DataTypes into a model-readable DataType</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class MLTransformation:
+    &#34;&#34;&#34;
+    Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
+    &#34;&#34;&#34;
+
+    tags: Set[Tag]
+    &#34;&#34;&#34;
+    Human or machine defined tags for easy indexing and reference
+    &#34;&#34;&#34;
+
+    input_datatype: List[DataType]
+    &#34;&#34;&#34;
+    What DataType(s) does this transformation accept?
+    &#34;&#34;&#34;
+
+    output_datatype: List[DataType]
+    &#34;&#34;&#34;
+    What DataType(s) does this transformation output?
+    &#34;&#34;&#34;
+
+    records_needed = Literal[&#34;SingleRecord&#34;, &#34;AllRecords&#34;]
+    &#34;&#34;&#34;
+    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed).  Examples include image transformations (resize, etc) or embedding models, token lookups, etc.
+
+    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
+
+    #TODO: Any use cases for joins or aggregation aka GROUP BY?  I don&#39;t think so...
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Subclasses</h3>
+<ul class="hlist">
+<li><a title="features.AutomaticTransformation" href="#features.AutomaticTransformation">AutomaticTransformation</a></li>
+<li><a title="features.CustomTransformation" href="#features.CustomTransformation">CustomTransformation</a></li>
+<li><a title="features.ModelEncoderTransformation" href="#features.ModelEncoderTransformation">ModelEncoderTransformation</a></li>
+<li><a title="features.SciKitLearnTransformation" href="#features.SciKitLearnTransformation">SciKitLearnTransformation</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.MLTransformation.input_datatype"><code class="name">var <span class="ident">input_datatype</span> : List[<a title="datatypes.DataType" href="datatypes.html#datatypes.DataType">DataType</a>]</code></dt>
+<dd>
+<div class="desc"><p>What DataType(s) does this transformation accept?</p></div>
+</dd>
+<dt id="features.MLTransformation.output_datatype"><code class="name">var <span class="ident">output_datatype</span> : List[<a title="datatypes.DataType" href="datatypes.html#datatypes.DataType">DataType</a>]</code></dt>
+<dd>
+<div class="desc"><p>What DataType(s) does this transformation output?</p></div>
+</dd>
+<dt id="features.MLTransformation.records_needed"><code class="name">var <span class="ident">records_needed</span></code></dt>
+<dd>
+<div class="desc"><p>(default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed).
+Examples include image transformations (resize, etc) or embedding models, token lookups, etc.</p>
+<p>AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)</p>
+<h1 id="todo-any-use-cases-for-joins-or-aggregation-aka-group-by-i-dont-think-so">TODO: Any use cases for joins or aggregation aka GROUP BY?
+I don't think so&hellip;</h1></div>
+</dd>
+<dt id="features.MLTransformation.tags"><code class="name">var <span class="ident">tags</span> : Set[<a title="common.Tag" href="common.html#common.Tag">Tag</a>]</code></dt>
+<dd>
+<div class="desc"><p>Human or machine defined tags for easy indexing and reference</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="features.ModelEncoderTransformation"><code class="flex name class">
+<span>class <span class="ident">ModelEncoderTransformation</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Applies another ML model to the feature's value, for example, applying an embedding model such as BERT to encode a string.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class ModelEncoderTransformation(MLTransformation):
+    &#34;&#34;&#34;
+    Applies another ML model to the feature&#39;s value, for example, applying an embedding model such as BERT to encode a string.
+    &#34;&#34;&#34;
+
+    model: Model</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.ModelEncoderTransformation.model"><code class="name">var <span class="ident">model</span> : <a title="model.Model" href="model.html#model.Model">Model</a></code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.MLTransformation.input_datatype" href="#features.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.output_datatype" href="#features.MLTransformation.output_datatype">output_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.records_needed" href="#features.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="features.MLTransformation.tags" href="#features.MLTransformation.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.Prediction"><code class="flex name class">
+<span>class <span class="ident">Prediction</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>A data value that was generated by a trained ML model.
+Includes both predictions served directly to an end user, but also predictions used as part of an <code>ml_transformation</code>.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Prediction(Feature):
+    &#34;&#34;&#34;A data value that was generated by a trained ML model.  Includes both predictions served directly to an end user, but also predictions used as part of an `ml_transformation`.&#34;&#34;&#34;
+
+    model_used: Model
+    &#34;&#34;&#34;
+    Output only. Automatically generated by Orchestra based on the Model that made this prediction.
+    What `Model` delivered this prediction?  References a specific version. The Model object includes all metadata &amp; lineage such as training data used, version info, etc
+    &#34;&#34;&#34;
+
+    input_features: List[Feature]
+    &#34;&#34;&#34;
+    Output only. Automatically generated by Orchestra based on the Model that made this prediction.
+    What are the Model&#39;s inputs?
+    &#34;&#34;&#34;
+
+    # TODO: Decide if business_logic and ml_transformations can be defined for a Prediction.  I can see a use case where you might use business_logic to transform the raw prediciton into a user-facing value (e.g., if &gt;.5 confidence, use value, otherwise, ...).  Similarly, I can maybe see a use case for ml_transformation where the prediction goes through some sort of normalization??
+
+    ml_transformations: None
+    business_logic: None
+
+    # TODO: Will we be able to represent model predictions with human_datatype as-is?  I think we might need to make changes to account for models such as a multi-class model, saving the predic_proba, etc.  It may be that we create a special datatype for prediction and then use human_datatype to represent the value after all business_logic is applied??</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Feature" href="#features.Feature">Feature</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.Prediction.business_logic"><code class="name">var <span class="ident">business_logic</span> : None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="features.Prediction.model_used"><code class="name">var <span class="ident">model_used</span> : <a title="model.Model" href="model.html#model.Model">Model</a></code></dt>
+<dd>
+<div class="desc"><p>Output only. Automatically generated by Orchestra based on the Model that made this prediction.
+What <code>Model</code> delivered this prediction?
+References a specific version. The Model object includes all metadata &amp; lineage such as training data used, version info, etc</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Feature" href="#features.Feature">Feature</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.RawFeature"><code class="flex name class">
+<span>class <span class="ident">RawFeature</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Data that comes directly from a DataProvider and will never be manipulated directly by Orchestra.
+If a value here is “bad” - it is 100% the fault of the DataProvider's owner 😉</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RawFeature(Feature):
+    &#34;&#34;&#34;
+    Data that comes directly from a DataProvider and will never be manipulated directly by Orchestra.  If a value here is “bad” - it is 100% the fault of the DataProvider&#39;s owner 😉
+    &#34;&#34;&#34;
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+
+    freshness: timedelta
+    &#34;&#34;&#34;
+    Output only.
+    Automatically generated by Orchestra based on the DatasetProvider attached to the Dataset
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Feature" href="#features.Feature">Feature</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.RawFeature.business_logic"><code class="name">var <span class="ident">business_logic</span> : None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Feature" href="#features.Feature">Feature</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.RawLabel"><code class="flex name class">
+<span>class <span class="ident">RawLabel</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>A label that comes directly from a DataProvider without any manipulation.
+If it's wrong it is the upstream provider's fault ;-)</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class RawLabel(Label):
+    &#34;&#34;&#34;
+    A label that comes directly from a DataProvider without any manipulation.  If it&#39;s wrong it is the upstream provider&#39;s fault ;-)
+    &#34;&#34;&#34;</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Label" href="#features.Label">Label</a></li>
+<li><a title="features.Feature" href="#features.Feature">Feature</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Feature" href="#features.Feature">Feature</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.SciKitLearnTransformation"><code class="flex name class">
+<span>class <span class="ident">SciKitLearnTransformation</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>Orchestra implemented wrappers around the SciKit pre-processing library</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class SciKitLearnTransformation(MLTransformation):
+    &#34;&#34;&#34;
+    Orchestra implemented wrappers around the SciKit pre-processing library
+    &#34;&#34;&#34;
+
+    # TODO: Implement this...
+
+    # TODO: which other libraries do we support for MLTransformations.SciKitLearn?
+    # https://scikit-learn.org/stable/modules/classes.html#module-sklearn.preprocessing
+    # https://www.tensorflow.org/guide/keras/preprocessing_layers#keras_preprocessing
+    # others?</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></li>
+</ul>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.MLTransformation.input_datatype" href="#features.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.output_datatype" href="#features.MLTransformation.output_datatype">output_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.records_needed" href="#features.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="features.MLTransformation.tags" href="#features.MLTransformation.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+<dt id="features.Timestamp"><code class="flex name class">
+<span>class <span class="ident">Timestamp</span></span>
+</code></dt>
+<dd>
+<div class="desc"><p>A data value that represents the timestamp of when other Features in that row of data were created or updated.
+Used for time-travel and time-aware joins.</p></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class Timestamp(Feature):
+    &#34;&#34;&#34;
+    A data value that represents the timestamp of when other Features in that row of data were created or updated.  Used for time-travel and time-aware joins.
+    &#34;&#34;&#34;
+
+    timestamp_format: str
+    &#34;&#34;&#34;
+    Format of the timestamp e.g., seconds since epoch, YYYYmmddHHss, etc
+    &#34;&#34;&#34;
+
+    # TODO: Should timestamp be a special sub-class or not? I think yes but 85% sure.
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+    freshness: None
+    data_checks: None</code></pre>
+</details>
+<h3>Ancestors</h3>
+<ul class="hlist">
+<li><a title="features.Feature" href="#features.Feature">Feature</a></li>
+</ul>
+<h3>Class variables</h3>
+<dl>
+<dt id="features.Timestamp.business_logic"><code class="name">var <span class="ident">business_logic</span> : None</code></dt>
+<dd>
+<div class="desc"></div>
+</dd>
+<dt id="features.Timestamp.timestamp_format"><code class="name">var <span class="ident">timestamp_format</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Format of the timestamp e.g., seconds since epoch, YYYYmmddHHss, etc</p></div>
+</dd>
+</dl>
+<h3>Inherited members</h3>
+<ul class="hlist">
+<li><code><b><a title="features.Feature" href="#features.Feature">Feature</a></b></code>:
+<ul class="hlist">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+</ul>
+</dd>
+</dl>
+</section>
+</article>
+<nav id="sidebar">
+<h1>Index</h1>
+<div class="toc">
+<ul></ul>
+</div>
+<ul id="index">
+<li><h3><a href="#header-classes">Classes</a></h3>
+<ul>
+<li>
+<h4><code><a title="features.Aggregation" href="#features.Aggregation">Aggregation</a></code></h4>
+<ul class="">
+<li><code><a title="features.Aggregation.aggregate_by" href="#features.Aggregation.aggregate_by">aggregate_by</a></code></li>
+<li><code><a title="features.Aggregation.aggregate_function" href="#features.Aggregation.aggregate_function">aggregate_function</a></code></li>
+<li><code><a title="features.Aggregation.custom_function" href="#features.Aggregation.custom_function">custom_function</a></code></li>
+<li><code><a title="features.Aggregation.order_by" href="#features.Aggregation.order_by">order_by</a></code></li>
+<li><code><a title="features.Aggregation.window" href="#features.Aggregation.window">window</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.AutomaticTransformation" href="#features.AutomaticTransformation">AutomaticTransformation</a></code></h4>
+</li>
+<li>
+<h4><code><a title="features.Code" href="#features.Code">Code</a></code></h4>
+<ul class="">
+<li><code><a title="features.Code.tags" href="#features.Code.tags">tags</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.CustomTransformation" href="#features.CustomTransformation">CustomTransformation</a></code></h4>
+<ul class="">
+<li><code><a title="features.CustomTransformation.data_code" href="#features.CustomTransformation.data_code">data_code</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.DataCheck" href="#features.DataCheck">DataCheck</a></code></h4>
+<ul class="">
+<li><code><a title="features.DataCheck.tags" href="#features.DataCheck.tags">tags</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.DataChecksForFeature" href="#features.DataChecksForFeature">DataChecksForFeature</a></code></h4>
+<ul class="">
+<li><code><a title="features.DataChecksForFeature.post_business_logic" href="#features.DataChecksForFeature.post_business_logic">post_business_logic</a></code></li>
+<li><code><a title="features.DataChecksForFeature.post_ml_transformation" href="#features.DataChecksForFeature.post_ml_transformation">post_ml_transformation</a></code></li>
+<li><code><a title="features.DataChecksForFeature.raw_input_features" href="#features.DataChecksForFeature.raw_input_features">raw_input_features</a></code></li>
+<li><code><a title="features.DataChecksForFeature.raw_input_lookups" href="#features.DataChecksForFeature.raw_input_lookups">raw_input_lookups</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.DataCode" href="#features.DataCode">DataCode</a></code></h4>
+<ul class="">
+<li><code><a title="features.DataCode.records_needed" href="#features.DataCode.records_needed">records_needed</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.DerivedFeature" href="#features.DerivedFeature">DerivedFeature</a></code></h4>
+</li>
+<li>
+<h4><code><a title="features.DerivedLabel" href="#features.DerivedLabel">DerivedLabel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="features.Feature" href="#features.Feature">Feature</a></code></h4>
+<ul class="two-column">
+<li><code><a title="features.Feature.business_logics" href="#features.Feature.business_logics">business_logics</a></code></li>
+<li><code><a title="features.Feature.data_checks" href="#features.Feature.data_checks">data_checks</a></code></li>
+<li><code><a title="features.Feature.description" href="#features.Feature.description">description</a></code></li>
+<li><code><a title="features.Feature.freshness" href="#features.Feature.freshness">freshness</a></code></li>
+<li><code><a title="features.Feature.human_datatype" href="#features.Feature.human_datatype">human_datatype</a></code></li>
+<li><code><a title="features.Feature.input_features" href="#features.Feature.input_features">input_features</a></code></li>
+<li><code><a title="features.Feature.input_lookups" href="#features.Feature.input_lookups">input_lookups</a></code></li>
+<li><code><a title="features.Feature.ml_transformations" href="#features.Feature.ml_transformations">ml_transformations</a></code></li>
+<li><code><a title="features.Feature.model_datatypes" href="#features.Feature.model_datatypes">model_datatypes</a></code></li>
+<li><code><a title="features.Feature.name" href="#features.Feature.name">name</a></code></li>
+<li><code><a title="features.Feature.tags" href="#features.Feature.tags">tags</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.Key" href="#features.Key">Key</a></code></h4>
+<ul class="">
+<li><code><a title="features.Key.business_logic" href="#features.Key.business_logic">business_logic</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.Label" href="#features.Label">Label</a></code></h4>
+</li>
+<li>
+<h4><code><a title="features.MLTransformation" href="#features.MLTransformation">MLTransformation</a></code></h4>
+<ul class="">
+<li><code><a title="features.MLTransformation.input_datatype" href="#features.MLTransformation.input_datatype">input_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.output_datatype" href="#features.MLTransformation.output_datatype">output_datatype</a></code></li>
+<li><code><a title="features.MLTransformation.records_needed" href="#features.MLTransformation.records_needed">records_needed</a></code></li>
+<li><code><a title="features.MLTransformation.tags" href="#features.MLTransformation.tags">tags</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.ModelEncoderTransformation" href="#features.ModelEncoderTransformation">ModelEncoderTransformation</a></code></h4>
+<ul class="">
+<li><code><a title="features.ModelEncoderTransformation.model" href="#features.ModelEncoderTransformation.model">model</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.Prediction" href="#features.Prediction">Prediction</a></code></h4>
+<ul class="">
+<li><code><a title="features.Prediction.business_logic" href="#features.Prediction.business_logic">business_logic</a></code></li>
+<li><code><a title="features.Prediction.model_used" href="#features.Prediction.model_used">model_used</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.RawFeature" href="#features.RawFeature">RawFeature</a></code></h4>
+<ul class="">
+<li><code><a title="features.RawFeature.business_logic" href="#features.RawFeature.business_logic">business_logic</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="features.RawLabel" href="#features.RawLabel">RawLabel</a></code></h4>
+</li>
+<li>
+<h4><code><a title="features.SciKitLearnTransformation" href="#features.SciKitLearnTransformation">SciKitLearnTransformation</a></code></h4>
+</li>
+<li>
+<h4><code><a title="features.Timestamp" href="#features.Timestamp">Timestamp</a></code></h4>
+<ul class="">
+<li><code><a title="features.Timestamp.business_logic" href="#features.Timestamp.business_logic">business_logic</a></code></li>
+<li><code><a title="features.Timestamp.timestamp_format" href="#features.Timestamp.timestamp_format">timestamp_format</a></code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</nav>
+</main>
+<footer id="footer">
+<p>Generated by <a href="https://pdoc3.github.io/pdoc" title="pdoc: Python API documentation generator"><cite>pdoc</cite> 0.10.0</a>.</p>
+</footer>
+</body>
+</html>
