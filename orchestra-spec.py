@@ -59,9 +59,9 @@ feature = Feature(
     description="this feature does X, Y, Z",
     # the data used to create this feature, if multiple data sources are used, they must share the same key space
     input_features=["data_source.feature_name1", "data_source.feature_name2"],
-    # optional, used for join-like logic or where a value must be looked up from another table that doesn't share the primary key space.  the key(s) of each `input_lookups['Dataset_name']` must be present in `input_features` or an error will be thrown
+    # optional, used for join-like logic or where a value must be looked up from another table that doesn't share the primary key space.  the key(s) of each `input_lookups['datasource_name']` must be present in `input_features` or an error will be thrown
     # only features specified in ['feature_name'] are returned
-    input_lookups=[["Dataset_name", ["feature_name"]]],
+    input_lookups=[["datasource_name", ["feature_name"]]],
     # the human-readable data type that is output by `business_logic`
     human_datatype=Boolean,
     # Business logic that translates the input_features into this feature.  3 options:
