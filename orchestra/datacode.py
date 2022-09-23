@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Literal, Dict, Optional
 from common import Metadata
 
 
@@ -18,7 +18,17 @@ class DataCode(Code):
     """
     Code that takes 1+ Features and returns 1+ Features
 
-    Python:
+    While some business logic such as `Aggregations` can be declared with Orchestra's library (and thus, the computations automagically orchestrated to run on your data infrastructure), Orchestra gives data scientists the flexibility to define their own custom business logic.  If your business logic fits within the `Aggregations` abstraction, we highly recommend doing so.
+
+    For all other cases, the `DataCode` abstraction contains the business logic used by a `Feature` to transform the `input_features` to the final value.  Accordingly, every `DataCode` object MUST be linked to a `Feature`.
+
+    We strongly suggest you follow the paradigm that data code only operates on the current row of data.  For a subset of DataCode types and freshness latencies, this enables the same code to work across both training and production environments.  However, should you need access to multiple rows of data, Orchestra provides three methods:
+
+    1. If your logic is an aggregation, you can leverage a custom aggregation function [TODO link to custom aggregates]
+    2. If your logic requires a join or lookup to another table, you can leverage the `input_datasources` that provides an abstraction to enable Orchestra to deliver the joined or looked-up data to your `DataCode`.
+    3. If your logic requires a full table scan, TODO: are there any uses cases for a full table scan outside of ML transformations?
+
+    Adding new types of `DataCode`.  The design of Orchestra is such that we operate blind to the imperative code itself (where orchestration requires awareness, there is a declarative interface) - this makes it straightforward for anyone to add a new data language/provider.
 
     """
 
@@ -34,9 +44,85 @@ class DataCode(Code):
 
     """
 
-    type = Literal["SQL", "SparkSQL", "pySpark", "Python"]
+
+class PythonDataCode(DataCode):
     """
-    What type of code does this block contain?"""
+    Function definition must be one of these
+
+    def python_data_code(records: List[dict], data_lookups: Dict[str, dict]) -> dict:
+
+        if `input_records_needed` = `Join`, `data_lookups` contains the joined records, otherwise, None
+        return value must deliver all `output_features` inside the dict
+
+        if `input_records_needed` = `SingleRecord`, `records` is just 1 record
+        Otherwise, all records requested are included.
+
+    def python_data_code(records: pd.Dataframe, data_lookups: Dict[str, pd.Dataframe]) -> pd.Dataframe:
+
+        same as above, just with Dataframes pre-loaded
+        return value must deliver all output_features inside the DF
+
+    """
+
+    python_modules: Optional[Dict[str, str]]
+    """
+    Modules in the form of {'module-nmae', '1.0.33'}
+    """
+
+    requirements_txt: str
+    """
+    requirements.txt file.  Combined with `python_modules` and `conda_yaml`
+    """
+
+    conda_yaml: str
+    """
+    conda.yaml file.  Combined with `python_modules` and `requirements_txt`
+    """
+
+    python_version: str
+    """
+    Python version in the format of '3.7.22'
+    """
+
+    docker_container: Optional[str]
+    """
+    Optional path to a docker container; otherwise the defaults are used
+     """
+
+
+class PySparkDataCode(DataCode):
+    """
+
+    def snowpark_data_code(records: pyspark.sql.DataFrame, data_lookups: Dict[str, pyspark.sql.DataFrame]) -> pyspark.sql.DataFrame:
+
+    """
+
+
+class SparkSQLDataCode(DataCode):
+    """ """
+
+
+class SQLDataCode(DataCode):
+    """
+    TODO: define this.
+    this should be a string return value that can fit in at {XX}
+
+    SELECT
+    {XX},
+    FROM table [...]
+
+    case when {{input_feature_1}} is 1 then 'no' else 'other' end
+
+    """
+
+
+class SnowparkDataCode(DataCode):
+    """
+
+    Snowpark function
+
+    def snowpark_data_code(records: snowflake.snowpark.DataFrame, data_lookups: Dict[str, snowflake.snowpark.DataFrame]) -> snowflake.snowpark.DataFrame:
+    """
 
 
 # TODO: Where do custom aggregation functions fit in?  I think they should be part of the Aggregations framework, but they will require DataCode...think this through.
