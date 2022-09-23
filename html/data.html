@@ -160,7 +160,17 @@ class SciKitLearnTransformation(MLTransformation):
 
 @dataclass
 class Feature:
-    &#34;&#34;&#34;An individual feature&#34;&#34;&#34;
+    &#34;&#34;&#34;An individual feature.
+
+    Visual depiction: https://ibb.co/9t2zhXS
+
+    Features form the basis of machine learning and are the core unit of abstraction in Orchestra&#39;s data model.
+
+    Author&#39;s note (EP):
+    I&#39;ve heard different perspectives on what a &#34;feature&#34; is, particularly when speaking to practitioners who exclusively work with modern NLP or computer vision techniques and only have model inputs that are embeddings (floating point vectors) created directly from the raw data without any business logic (e.g., text —&gt; embedding or image —&gt; embedding).  In this situation, I often hear &#34;we don&#39;t have features, we just use embeddings as model input” although I have also heard &#34;we do a bit of text clean up before applying an embedding based model in order to reduce our cost profile so it is a feature.&#34;
+
+    I believe there is great benefit to creating a common definition of a Feature that includes both modern techniques (ala transformers, etc) and traditionally engineered features (ala feature engineering) as I expect for the foreseeable future (note 1) a single company&#39;s full breadth of models will include both.  This common definition will also ease communication with business stakeholders about how machine learning works.
+    &#34;&#34;&#34;
 
     def __init__():
         super().__init__()
@@ -201,9 +211,16 @@ class Feature:
 
     business_logics: Optional[List[DataCode]]
     &#34;&#34;&#34;
-    Optional business logic that translates the input_features into this feature.  Each provided DataCode is executed in order, passing information between steps.
+    Optional. Business logic that translates the input_features into this feature.  Each provided DataCode is executed in order, passing information between steps.
 
-    Can be 1+ DataCodes.    
+    Can be 1+ DataCodes. 
+
+    A transformation created based on a business understanding of the data in order to provide additional context to the model in order to accelerate or simplify how it learns patterns in the data.  Examples include calculating a total purchase amount that includes tax, collapsing categories that are actually the same, etc.  Business logic is optional (for example, if the feature is “chat message” there is no need for additional business logic).  
+
+    A common piece of business logic to apply is an aggregation over multiple rows of data, or combining values over a specific time period through an average, count, sum, etc (in SQL, this is referred to as a GROUP BY).  This pattern creates complexity for productionizing features since at model inference time, typically only the current row of data is available.  Orchestra&#39;s Aggregation abstraction simplifies the process of writing production-ready aggregations [see action items below for a discussion].
+
+    Author&#39;s note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.  Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.  Potato-patato.  Irregardless of what you call it, folks apply business logic, then transform everything to numbers.
+   
     &#34;&#34;&#34;
 
     ml_transformations: Optional[List[MLTransformation]]
@@ -211,6 +228,11 @@ class Feature:
     Optional ML transformations (aka pre-processing aka functions that translate from human-readable data to model-readable data).
     
     If not provided, Orchestra will check that only model-readable DataTypes pass through.
+
+    ML-specific transformations: a transformation that is done only for the purposes of translating the data into a format a model can understand.  Said differently, these transformations would never happen outside the context of machine learning (e.g., would not be done inside a traditional BI table) and do NOT change what the data describes, only how the data is represented (e.g., a ML transformation will not go from “meaning A” to “meaning B”).
+
+    Author&#39;s note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.  Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.  Potato-patato.  Irregardless of what you call it, folks apply business logic, then transform everything to numbers.
+
     &#34;&#34;&#34;
 
     freshness: timedelta
@@ -378,7 +400,41 @@ class Aggregation(DataCode):
     Features to sort the records by
 
     Only applies if window is a last N records.
-    &#34;&#34;&#34;</code></pre>
+    &#34;&#34;&#34;
+
+
+class InputDataView:
+    &#34;&#34;&#34; &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    # # machine-readable but human-understandable common name
+    # name = (&#34;data_source_name&#34;,)
+    # # human-readable notes
+    # description = (&#34;this source describes X business thing&#34;,)
+    # # the unique keys that describe the entity contained within this table
+    # keys = ([Key(), Key()],)
+    # timestamp = (
+    #     Timestamp(name=&#34;last_updated&#34;, human_datatype=String, format=&#34;yyyyMMdd|hh:ss&#34;),
+    # )
+    # # the features provided; in database terms, the schema
+    # # `keys` and `timestamp` can be treated by the user as if they were defined as output_features, but the user does not need to include them here
+    # output_features = (
+    #     [
+    #         Feature(),
+    #         Feature(),
+    #     ],
+    # )
+    # # Any data quality or data distribution checks that should be performed before passing this data downstream
+    # data_checks = (&#34;&#34;,)</code></pre>
 </details>
 </section>
 <section>
@@ -791,14 +847,31 @@ For example, removing known bad labels, etc.</p></div>
 <span>class <span class="ident">Feature</span></span>
 </code></dt>
 <dd>
-<div class="desc"><p>An individual feature</p></div>
+<div class="desc"><p>An individual feature.</p>
+<p>Visual depiction: <a href="https://ibb.co/9t2zhXS">https://ibb.co/9t2zhXS</a></p>
+<p>Features form the basis of machine learning and are the core unit of abstraction in Orchestra's data model.</p>
+<p>Author's note (EP):
+I've heard different perspectives on what a "feature" is, particularly when speaking to practitioners who exclusively work with modern NLP or computer vision techniques and only have model inputs that are embeddings (floating point vectors) created directly from the raw data without any business logic (e.g., text —&gt; embedding or image —&gt; embedding).
+In this situation, I often hear "we don't have features, we just use embeddings as model input” although I have also heard "we do a bit of text clean up before applying an embedding based model in order to reduce our cost profile so it is a feature."</p>
+<p>I believe there is great benefit to creating a common definition of a Feature that includes both modern techniques (ala transformers, etc) and traditionally engineered features (ala feature engineering) as I expect for the foreseeable future (note 1) a single company's full breadth of models will include both.
+This common definition will also ease communication with business stakeholders about how machine learning works.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">@dataclass
 class Feature:
-    &#34;&#34;&#34;An individual feature&#34;&#34;&#34;
+    &#34;&#34;&#34;An individual feature.
+
+    Visual depiction: https://ibb.co/9t2zhXS
+
+    Features form the basis of machine learning and are the core unit of abstraction in Orchestra&#39;s data model.
+
+    Author&#39;s note (EP):
+    I&#39;ve heard different perspectives on what a &#34;feature&#34; is, particularly when speaking to practitioners who exclusively work with modern NLP or computer vision techniques and only have model inputs that are embeddings (floating point vectors) created directly from the raw data without any business logic (e.g., text —&gt; embedding or image —&gt; embedding).  In this situation, I often hear &#34;we don&#39;t have features, we just use embeddings as model input” although I have also heard &#34;we do a bit of text clean up before applying an embedding based model in order to reduce our cost profile so it is a feature.&#34;
+
+    I believe there is great benefit to creating a common definition of a Feature that includes both modern techniques (ala transformers, etc) and traditionally engineered features (ala feature engineering) as I expect for the foreseeable future (note 1) a single company&#39;s full breadth of models will include both.  This common definition will also ease communication with business stakeholders about how machine learning works.
+    &#34;&#34;&#34;
 
     def __init__():
         super().__init__()
@@ -839,9 +912,16 @@ class Feature:
 
     business_logics: Optional[List[DataCode]]
     &#34;&#34;&#34;
-    Optional business logic that translates the input_features into this feature.  Each provided DataCode is executed in order, passing information between steps.
+    Optional. Business logic that translates the input_features into this feature.  Each provided DataCode is executed in order, passing information between steps.
 
-    Can be 1+ DataCodes.    
+    Can be 1+ DataCodes. 
+
+    A transformation created based on a business understanding of the data in order to provide additional context to the model in order to accelerate or simplify how it learns patterns in the data.  Examples include calculating a total purchase amount that includes tax, collapsing categories that are actually the same, etc.  Business logic is optional (for example, if the feature is “chat message” there is no need for additional business logic).  
+
+    A common piece of business logic to apply is an aggregation over multiple rows of data, or combining values over a specific time period through an average, count, sum, etc (in SQL, this is referred to as a GROUP BY).  This pattern creates complexity for productionizing features since at model inference time, typically only the current row of data is available.  Orchestra&#39;s Aggregation abstraction simplifies the process of writing production-ready aggregations [see action items below for a discussion].
+
+    Author&#39;s note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.  Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.  Potato-patato.  Irregardless of what you call it, folks apply business logic, then transform everything to numbers.
+   
     &#34;&#34;&#34;
 
     ml_transformations: Optional[List[MLTransformation]]
@@ -849,6 +929,11 @@ class Feature:
     Optional ML transformations (aka pre-processing aka functions that translate from human-readable data to model-readable data).
     
     If not provided, Orchestra will check that only model-readable DataTypes pass through.
+
+    ML-specific transformations: a transformation that is done only for the purposes of translating the data into a format a model can understand.  Said differently, these transformations would never happen outside the context of machine learning (e.g., would not be done inside a traditional BI table) and do NOT change what the data describes, only how the data is represented (e.g., a ML transformation will not go from “meaning A” to “meaning B”).
+
+    Author&#39;s note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.  Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.  Potato-patato.  Irregardless of what you call it, folks apply business logic, then transform everything to numbers.
+
     &#34;&#34;&#34;
 
     freshness: timedelta
@@ -877,9 +962,20 @@ class Feature:
 <dl>
 <dt id="data.Feature.business_logics"><code class="name">var <span class="ident">business_logics</span> : Optional[List[<a title="data.DataCode" href="#data.DataCode">DataCode</a>]]</code></dt>
 <dd>
-<div class="desc"><p>Optional business logic that translates the input_features into this feature.
+<div class="desc"><p>Optional. Business logic that translates the input_features into this feature.
 Each provided DataCode is executed in order, passing information between steps.</p>
-<p>Can be 1+ DataCodes.</p></div>
+<p>Can be 1+ DataCodes. </p>
+<p>A transformation created based on a business understanding of the data in order to provide additional context to the model in order to accelerate or simplify how it learns patterns in the data.
+Examples include calculating a total purchase amount that includes tax, collapsing categories that are actually the same, etc.
+Business logic is optional (for example, if the feature is “chat message” there is no need for additional business logic).
+</p>
+<p>A common piece of business logic to apply is an aggregation over multiple rows of data, or combining values over a specific time period through an average, count, sum, etc (in SQL, this is referred to as a GROUP BY).
+This pattern creates complexity for productionizing features since at model inference time, typically only the current row of data is available.
+Orchestra's Aggregation abstraction simplifies the process of writing production-ready aggregations [see action items below for a discussion].</p>
+<p>Author's note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.
+Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.
+Potato-patato.
+Irregardless of what you call it, folks apply business logic, then transform everything to numbers.</p></div>
 </dd>
 <dt id="data.Feature.data_checks"><code class="name">var <span class="ident">data_checks</span> : Optional[<a title="data.DataChecksForFeature" href="#data.DataChecksForFeature">DataChecksForFeature</a>]</code></dt>
 <dd>
@@ -912,7 +1008,13 @@ Executed by Orchesrta using the user's supplied checking framwork.</p></div>
 <dt id="data.Feature.ml_transformations"><code class="name">var <span class="ident">ml_transformations</span> : Optional[List[<a title="data.MLTransformation" href="#data.MLTransformation">MLTransformation</a>]]</code></dt>
 <dd>
 <div class="desc"><p>Optional ML transformations (aka pre-processing aka functions that translate from human-readable data to model-readable data).</p>
-<p>If not provided, Orchestra will check that only model-readable DataTypes pass through.</p></div>
+<p>If not provided, Orchestra will check that only model-readable DataTypes pass through.</p>
+<p>ML-specific transformations: a transformation that is done only for the purposes of translating the data into a format a model can understand.
+Said differently, these transformations would never happen outside the context of machine learning (e.g., would not be done inside a traditional BI table) and do NOT change what the data describes, only how the data is represented (e.g., a ML transformation will not go from “meaning A” to “meaning B”).</p>
+<p>Author's note (EP): In my conversations with 100s of ML practitioners, I have heard inconsistency in what each of these 2 steps (business logic, ML-specific transformations) are called.
+Some say “feature engineering”, some say “pre-processing”, some use a combination of both terms.
+Potato-patato.
+Irregardless of what you call it, folks apply business logic, then transform everything to numbers.</p></div>
 </dd>
 <dt id="data.Feature.model_datatypes"><code class="name">var <span class="ident">model_datatypes</span> : List[<a title="datatypes.DataType" href="datatypes.html#datatypes.DataType">DataType</a>]</code></dt>
 <dd>
@@ -920,6 +1022,60 @@ Executed by Orchesrta using the user's supplied checking framwork.</p></div>
 Set automatically based on the <code>ml_transformations.output_datatype</code>'s</p></div>
 </dd>
 <dt id="data.Feature.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Machine-readable but human-understandable name</p></div>
+</dd>
+</dl>
+</dd>
+<dt id="data.InputDataView"><code class="flex name class">
+<span>class <span class="ident">InputDataView</span></span>
+</code></dt>
+<dd>
+<div class="desc"></div>
+<details class="source">
+<summary>
+<span>Expand source code</span>
+</summary>
+<pre><code class="python">class InputDataView:
+    &#34;&#34;&#34; &#34;&#34;&#34;
+
+    name: str
+    &#34;&#34;&#34;
+    Machine-readable but human-understandable name
+    &#34;&#34;&#34;
+
+    description: str
+    &#34;&#34;&#34;
+    Human-readable notes
+    &#34;&#34;&#34;
+
+    # # machine-readable but human-understandable common name
+    # name = (&#34;data_source_name&#34;,)
+    # # human-readable notes
+    # description = (&#34;this source describes X business thing&#34;,)
+    # # the unique keys that describe the entity contained within this table
+    # keys = ([Key(), Key()],)
+    # timestamp = (
+    #     Timestamp(name=&#34;last_updated&#34;, human_datatype=String, format=&#34;yyyyMMdd|hh:ss&#34;),
+    # )
+    # # the features provided; in database terms, the schema
+    # # `keys` and `timestamp` can be treated by the user as if they were defined as output_features, but the user does not need to include them here
+    # output_features = (
+    #     [
+    #         Feature(),
+    #         Feature(),
+    #     ],
+    # )
+    # # Any data quality or data distribution checks that should be performed before passing this data downstream
+    # data_checks = (&#34;&#34;,)</code></pre>
+</details>
+<h3>Class variables</h3>
+<dl>
+<dt id="data.InputDataView.description"><code class="name">var <span class="ident">description</span> : str</code></dt>
+<dd>
+<div class="desc"><p>Human-readable notes</p></div>
+</dd>
+<dt id="data.InputDataView.name"><code class="name">var <span class="ident">name</span> : str</code></dt>
 <dd>
 <div class="desc"><p>Machine-readable but human-understandable name</p></div>
 </dd>
@@ -1438,6 +1594,13 @@ Used for time-travel and time-aware joins.</p></div>
 <li><code><a title="data.Feature.ml_transformations" href="#data.Feature.ml_transformations">ml_transformations</a></code></li>
 <li><code><a title="data.Feature.model_datatypes" href="#data.Feature.model_datatypes">model_datatypes</a></code></li>
 <li><code><a title="data.Feature.name" href="#data.Feature.name">name</a></code></li>
+</ul>
+</li>
+<li>
+<h4><code><a title="data.InputDataView" href="#data.InputDataView">InputDataView</a></code></h4>
+<ul class="">
+<li><code><a title="data.InputDataView.description" href="#data.InputDataView.description">description</a></code></li>
+<li><code><a title="data.InputDataView.name" href="#data.InputDataView.name">name</a></code></li>
 </ul>
 </li>
 <li>
