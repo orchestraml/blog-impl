@@ -1,0 +1,333 @@
+from __future__ import annotations
+from dataclasses import dataclass
+
+from typing import Iterable
+from pydantic import BaseModel
+from typing import List, Optional, Literal
+
+
+from datatypes import DataType
+from datetime import timedelta
+from model import Model
+
+
+class DataCheck:
+    """
+
+    Placeholder for Deequ, PyTest, great_expectation based checks
+    """
+
+
+class DataChecksForFeature:
+    raw_input_features: Optional[DataCheck]
+    raw_input_lookups: Optional[DataCheck]
+    post_business_logic: Optional[DataCheck]
+    post_ml_transformation: Optional[DataCheck]
+
+
+class Code:
+    """
+    Parent class of all code types.
+    Throws an error if used directly.
+    """
+
+
+class DataCode(Code):
+    """
+    Code that takes 1+ Features and returns 1+ Features
+
+    """
+
+    records_needed = Literal["SingleRecord", "Aggregation", "AllRecords", "Join"]
+    """
+    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed)
+
+    Aggregation: Requires multiple records of data from the same GROUP BY features.
+
+    Join: Requires records obtained by joining to a Dataset with differnet Key(s)
+
+    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
+
+    """
+
+
+class MLTransformation:
+    """
+    Any transformation logic that translates a human-readable DataTypes into a model-readable DataType
+    """
+
+    input_datatype: List[DataType]
+    """
+    What DataType(s) does this transformation accept?
+    """
+
+    output_datatype: List[DataType]
+    """
+    What DataType(s) does this transformation output?
+    """
+
+    records_needed = Literal["SingleRecord", "AllRecords"]
+    """
+    (default) SingleRecord: Only requires the data from a single record to execute (e.g., the current record being processed).  Examples include image transformations (resize, etc) or embedding models, token lookups, etc.
+
+    AllRecords: Requires every record (or a statistical sample if using big data estimation algorithms)
+
+    #TODO: Any use cases for joins or aggregation aka GROUP BY?  I don't think so...
+    """
+
+
+class AutomaticTransformation(MLTransformation):
+    """
+    Orchestra applies its pre-defined logic, based on the following hueristics computed using the data:
+
+    TODO: define these hueristics
+    """
+
+    # TODO: Implement logic so that this class returns the correct values for output_datatype
+
+
+class ModelEncoderTransformation(MLTransformation):
+    """
+    Applies another ML model to the feature's value, for example, applying an embedding model such as BERT to encode a string.
+    """
+
+    model: Model
+
+
+class CustomTransformation(MLTransformation):
+    """
+    Custom function that operates at a row or dataset level.
+    """
+
+    data_code: DataCode
+
+
+class SciKitLearnTransformation(MLTransformation):
+    """
+    Orchestra implemented wrappers around the SciKit pre-processing library
+    """
+
+    # TODO: Implement this...
+
+
+@dataclass
+class Feature:
+    """An individual feature"""
+
+    def __init__():
+        super().__init__()
+        return
+
+    name: str
+    """
+    Machine-readable but human-understandable name
+    """
+
+    description: str
+    """
+    Human-readable notes
+    """
+
+    input_features: List[Feature]
+    """
+    The input data used to create this feature.
+
+    If Features from 2+ different `Datasets` are used, both `Datasets` must share the same `Key` space.
+    """
+
+    input_lookups: Optional[List[Feature]]
+    """
+    Optional, used for join-like logic or where a value must be looked up from another table that doesn't share the primary key space. 
+    
+    The `Key(s)` of each `input_lookups[Feature]`'s `Dataset` must be included as `input_features`
+    """
+
+    human_datatype: DataType
+    """
+    The human-readable data type that is output by the code specified by `business_logic`
+    """
+
+    model_datatypes: List[DataType]
+    """
+    Output only.  Set automatically based on the `ml_transformations.output_datatype`'s"""
+
+    business_logics: Optional[List[DataCode]]
+    """
+    Optional business logic that translates the input_features into this feature.  Each provided DataCode is executed in order, passing information between steps.
+
+    Can be 1+ DataCodes.    
+    """
+
+    ml_transformations: Optional[List[MLTransformation]]
+    """
+    Optional ML transformations (aka pre-processing aka functions that translate from human-readable data to model-readable data).
+    
+    If not provided, Orchestra will check that only model-readable DataTypes pass through.
+    """
+
+    freshness: timedelta
+    """
+    How frequently does this feature's value need to be updated to reflect the most recently available upstream/source data?
+
+    Implemented as: If [now() - time_of_last_computation] >= `freshness`, recompute the value if any of input_features have changed within the time window [now() --> time_of_last_computation]
+    
+    """
+
+    data_checks: Optional[DataChecksForFeature]
+    """
+    Any data quality or data distribution checks that should be performed.  Executed by Orchesrta using the user's supplied checking framwork.
+    """
+
+
+def RawFeature(Feature):
+    """
+    Data that comes directly from a DataProvider and will never be manipulated directly by Orchestra.  If a value here is “bad” - it is 100% the fault of the DataProvider's owner 😉
+    """
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+
+    freshness: timedelta
+    """
+    Output only.
+    Automatically generated by Orchestra based on the DatasetProvider attached to the Dataset
+    """
+
+
+def DerivedFeature(Feature):
+    """
+    Data that is manipulated by Orchestra based on the user's declarations.  This is the most commonly used class within Orchestra.
+    """
+
+
+def Key(Feature):
+    """A primary or secondary key field.  Used for aggregations and lookups."""
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+    freshness: None
+    model_datatypes: None
+
+
+def Prediction(Feature):
+    """A data value that was generated by a trained ML model.  Includes both predictions served directly to an end user, but also predictions used as part of an `ml_transformation`."""
+
+    model_used: Model
+    """
+    Output only. Automatically generated by Orchestra based on the Model that made this prediction.
+    What `Model` delivered this prediction?  References a specific version. The Model object includes all metadata & lineage such as training data used, version info, etc
+    """
+
+    input_features: List[Feature]
+    """
+    Output only. Automatically generated by Orchestra based on the Model that made this prediction.
+    What are the Model's inputs?
+    """
+
+    # TODO: Decide if business_logic and ml_transformations can be defined for a Prediction.  I can see a use case where you might use business_logic to transform the raw prediciton into a user-facing value (e.g., if >.5 confidence, use value, otherwise, ...).  Similarly, I can maybe see a use case for ml_transformation where the prediction goes through some sort of normalization??
+
+    ml_transformations: None
+    business_logic: None
+
+    # TODO: Will we be able to represent model predictions with human_datatype as-is?  I think we might need to make changes to account for models such as a multi-class model, saving the predic_proba, etc.  It may be that we create a special datatype for prediction and then use human_datatype to represent the value after all business_logic is applied??
+
+
+def Label(Feature):
+    """A data value that is used to train a semi-supervised or supervised ML model"""
+
+    # TODO: I /think/ Label can be identical, but we may want to exclude ml_transformations?  But need to think about this a bit more...
+
+
+def RawLabel(Label):
+    """
+    A label that comes directly from a DataProvider without any manipulation.  If it's wrong it is the upstream provider's fault ;-)
+    """
+
+
+def DerivedLabel(Label):
+    """
+    A label that has business_logic applied to get the correct value.  For example, removing known bad labels, etc.
+    """
+
+
+def Timestamp(Feature):
+    """
+    A data value that represents the timestamp of when other Features in that row of data were created or updated.  Used for time-travel and time-aware joins.
+    """
+
+    timestamp_format: str
+    """
+    Format of the timestamp e.g., seconds since epoch, YYYYmmddHHss, etc
+    """
+
+    # TODO: Should timestamp be a special sub-class or not? I think yes but 85% sure.
+
+    ml_transformations: None
+    business_logic: None
+    input_features: None
+    freshness: None
+    data_checks: None
+
+
+class Aggregation(DataCode):
+    """
+    Defines an aggregation function.
+
+    aka GROUP BY in SQL
+
+    """
+
+    records_needed: Literal["Aggregation"]
+    """
+    Default value, can't be changed
+    """
+
+    aggregate_function: Literal["SUM", "COUNT", "MAX", "MIN", "AVG", "CUSTOM"]
+    """
+    What function is used to compute the aggregation?
+
+    All except CUSTOM are built-in to Orchestra.
+
+    SELECT aggregate_function(Feature) FROM ...
+
+    Credit: Portions borrowed from the Feathr spec 
+    """
+
+    aggregate_by: List[Feature]
+    """
+    What Features are we aggregating by?
+
+    ... GROUP BY [aggregate_by, ...]
+    """
+
+    custom_function: Optional[DataCode]
+    """
+        TODO: define the limits of what types of DataCode can be provided here
+    """
+
+    window: str
+    """
+    Either a time window or the last N records.
+
+    d(day)
+    h(hour)
+    m(minute)
+    s(second)
+    n(last n records)
+    
+    Examples: “7d’ or “5h” or “3m” or “1s” or "5n"
+
+    Any time window: ... WHERE now() - record_timestamp <= window
+    Any N window: ... ORDER BY [order_by, ...] LIMIT n
+
+    Credit: Portions borrowed from the Feathr spec 
+    """
+
+    order_by: Optional[tuple(List[Feature], Literal["DESC", "ASC"])]
+    """
+    Features to sort the records by
+
+    Only applies if window is a last N records.
+    """
